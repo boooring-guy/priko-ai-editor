@@ -3,10 +3,18 @@
 import * as React from "react";
 import * as RechartsPrimitive from "recharts";
 
+import { DEFAULT_THEME, THEME_NAMES } from "@/lib/themes";
 import { cn } from "@/lib/utils";
 
 // Format: { THEME_NAME: CSS_SELECTOR }
-const THEMES = { light: "", dark: ".dark" } as const;
+const THEMES: Record<string, string> = Object.fromEntries([
+  ...THEME_NAMES.map((theme) => [
+    theme,
+    theme === DEFAULT_THEME ? "" : `.${theme}`,
+  ]),
+  ["light", ".light"],
+  ["dark", ".dark"],
+]);
 
 export type ChartConfig = {
   [k in string]: {
@@ -14,7 +22,7 @@ export type ChartConfig = {
     icon?: React.ComponentType;
   } & (
     | { color?: string; theme?: never }
-    | { color?: never; theme: Record<keyof typeof THEMES, string> }
+    | { color?: never; theme: Record<string, string> }
   );
 };
 
@@ -79,26 +87,22 @@ const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
   }
 
   return (
-    <style
-      dangerouslySetInnerHTML={{
-        __html: Object.entries(THEMES)
-          .map(
-            ([theme, prefix]) => `
+    <style>
+      {Object.entries(THEMES)
+        .map(
+          ([theme, prefix]) => `
 ${prefix} [data-chart=${id}] {
 ${colorConfig
   .map(([key, itemConfig]) => {
-    const color =
-      itemConfig.theme?.[theme as keyof typeof itemConfig.theme] ||
-      itemConfig.color;
+    const color = itemConfig.theme?.[theme] || itemConfig.color;
     return color ? `  --color-${key}: ${color};` : null;
   })
   .join("\n")}
 }
 `,
-          )
-          .join("\n"),
-      }}
-    />
+        )
+        .join("\n")}
+    </style>
   );
 };
 
