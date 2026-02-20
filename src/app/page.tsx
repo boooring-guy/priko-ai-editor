@@ -1,5 +1,6 @@
 "use client";
 
+import { version } from "../../package.json";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React from "react";
@@ -34,7 +35,10 @@ export default function Home() {
   return (
     <div className="min-h-screen flex flex-col">
       <header className="flex justify-between items-center border-b p-4 px-8 shadow-sm">
-        <h1 className="text-xl font-bold tracking-tight">Priko Workspace</h1>
+        <div className="flex items-center gap-2">
+          <h1 className="text-xl font-bold tracking-tight">Priko Workspace</h1>
+          <span className="text-xs text-muted-foreground">v{version}</span>
+        </div>
         <div className="flex items-center gap-3">
           <ThemeSwitcher />
           <UserButton />
