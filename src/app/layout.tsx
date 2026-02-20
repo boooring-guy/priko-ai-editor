@@ -1,7 +1,7 @@
-import { TooltipProvider } from "@radix-ui/react-tooltip";
+import { Toaster } from "@/components/ui/sonner";
 import type { Metadata } from "next";
 import { Google_Sans, JetBrains_Mono } from "next/font/google";
-import { ThemeProvider } from "../components/theme-provider";
+import { Providers } from "../components/providers";
 import "./globals.css";
 
 const googleSans = Google_Sans({
@@ -30,14 +30,8 @@ export default function RootLayout({
         className={`${googleSans.className} ${JetBrainsMono.variable} antialiased`}
         suppressHydrationWarning
       >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <TooltipProvider>{children}</TooltipProvider>
-        </ThemeProvider>
+        <Providers>{children}</Providers>
+        <Toaster />
       </body>
     </html>
   );

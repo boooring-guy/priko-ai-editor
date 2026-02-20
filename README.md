@@ -116,14 +116,7 @@ The long-term goal is to run the entire stack on a **single Linux server** using
 
 ## 🗺️ Roadmap
 
-- [x] Project scaffolding (Next.js + Bun + Biome)
-- [ ] Authentication with Better Auth
-- [ ] Database integration (Neon / Postgres)
-- [ ] Core editor UI with shadcn/ui
-- [ ] Realtime collaboration via Socket.IO
-- [ ] Analytics with PostHog
-- [ ] Dockerized self-hosted deployment
-- [ ] AI-powered editor features
+The roadmap and current tasks are now tracked in [`TODO.md`](./TODO.md).
 
 ---
 
