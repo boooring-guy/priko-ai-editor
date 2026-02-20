@@ -7,6 +7,7 @@ import {
   QueryClientProvider,
 } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { DEFAULT_THEME, THEME_NAMES } from "@/lib/themes";
 import { ThemeProvider } from "./theme-provider";
 
 // Use the latest TanStack Query guidelines for Next.js App Router
@@ -35,15 +36,15 @@ export function getQueryClient() {
   }
 }
 
+export const queryClient = getQueryClient();
 export function Providers({ children }: { children: React.ReactNode }) {
-  const queryClient = getQueryClient();
-
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider
         attribute="class"
-        defaultTheme="system"
-        enableSystem
+        defaultTheme={DEFAULT_THEME}
+        themes={THEME_NAMES}
+        enableSystem={false}
         disableTransitionOnChange
       >
         <TooltipProvider>{children}</TooltipProvider>

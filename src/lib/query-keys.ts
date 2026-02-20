@@ -73,12 +73,7 @@ export function createQueryKeyFactory<TBase extends string>(baseKey: TBase) {
 // ============================================================================
 
 export const queryKeys = {
-  // Example: users keys
-  // users: createQueryKeyFactory("users"),
-
-  // Example: posts keys
-  // posts: createQueryKeyFactory("posts"),
-
   // Auth keys (since better-auth is used in the project)
   auth: createQueryKeyFactory("auth"),
+  projects: createQueryKeyFactory("projects"),
 };

@@ -8,6 +8,10 @@ const envSchema = z.object({
   NEXT_PUBLIC_APP_URL: z.url(),
   RESEND_API_KEY: z.string(),
   EMAIL_FROM: z.string(),
+  AWS_ACCESS_KEY_ID: z.string(),
+  AWS_SECRET_ACCESS_KEY: z.string(),
+  AWS_REGION: z.string(),
+  AWS_S3_BUCKET: z.string(),
 });
 
 // parse check
