@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { AvatarUpload } from "@/modules/user/components/avatar-upload";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -44,6 +45,7 @@ export const signUpSchema = z.object({
     ),
   email: z.string().email("Invalid email address"),
   password: z.string().min(8, "Password must be at least 8 characters long"),
+  image: z.instanceof(File).optional().nullable(),
 });
 
 export type SignUpValues = z.infer<typeof signUpSchema>;
@@ -60,6 +62,7 @@ export const SignUpCard = () => {
       username: "",
       email: "",
       password: "",
+      image: null,
     },
   });
 
@@ -81,6 +84,16 @@ export const SignUpCard = () => {
       <CardContent>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <FormField
+              control={form.control}
+              name="image"
+              render={({ field }) => (
+                <FormItem className="flex justify-center flex-col items-center">
+                  <AvatarUpload onFileSelect={field.onChange} />
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <div className="flex flex-col sm:flex-row gap-4">
               <FormField
                 control={form.control}

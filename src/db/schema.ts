@@ -1,6 +1,14 @@
 import { relations } from "drizzle-orm";
-import { boolean, index, pgTable, text, timestamp } from "drizzle-orm/pg-core";
-
+import {
+  boolean,
+  index,
+  pgEnum,
+  pgTable,
+  text,
+  timestamp,
+} from "drizzle-orm/pg-core";
+import { createInsertSchema, createSelectSchema } from "drizzle-zod";
+import type { InferSelectModel, InferInsertModel } from "drizzle-orm";
 export const user = pgTable("user", {
   id: text("id").primaryKey(),
   name: text("name").notNull(),
@@ -83,6 +91,7 @@ export const verification = pgTable(
 export const userRelations = relations(user, ({ many }) => ({
   sessions: many(session),
   accounts: many(account),
+  projects: many(projects),
 }));
 
 export const sessionRelations = relations(session, ({ one }) => ({
@@ -98,3 +107,45 @@ export const accountRelations = relations(account, ({ one }) => ({
     references: [user.id],
   }),
 }));
+
+export const importStatuses = ["importing", "completed", "failed"] as const;
+export type ImportStatus = (typeof importStatuses)[number];
+
+export const importStatusEnum = pgEnum("import_status", importStatuses);
+export const projects = pgTable(
+  "projects",
+  {
+    id: text("id")
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+    name: text("name").notNull(),
+    description: text("description"),
+    importStatus: importStatusEnum("import_status")
+      .default("importing")
+      .notNull(),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at")
+      .defaultNow()
+      .$onUpdate(() => /* @__PURE__ */ new Date())
+      .notNull(),
+    ownerId: text("user_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+  },
+  (table) => [index("by_owner_id").on(table.ownerId)],
+);
+
+// Relation between Project and other Tables
+export const projectRelations = relations(projects, ({ one }) => ({
+  // A project has one user
+  user: one(user, {
+    fields: [projects.ownerId],
+    references: [user.id],
+  }),
+}));
+
+// schemas
+export const projectInsertSchema = createInsertSchema(projects);
+export const projectSelectSchema = createSelectSchema(projects);
+export type ProjectInsert = InferInsertModel<typeof projects>;
+export type ProjectSelect = InferSelectModel<typeof projects>;
