@@ -24,7 +24,10 @@ export const demoGenerate = inngestClient.createFunction(
     const scarppedResults = await step.run("scrape-urls", async () => {
       const results = await Promise.all(
         urls.map(async (url) => {
-          const result = await firecrawl.scrape(url, { formats: ["markdown"] });
+          const result = await firecrawl.scrape(url, {
+            formats: ["markdown"],
+            maxAge: 360000,
+          });
           return result.markdown ?? null;
         }),
       );
@@ -37,7 +40,7 @@ export const demoGenerate = inngestClient.createFunction(
 
     const generatedText = await step.run("generate-text", async () => {
       const response = await generateText({
-        model: googleAI("gemini-2.5-pro"),
+        model: googleAI("gemini-3-flash-preview"),
         prompt: finalPrompt,
       });
       return response;

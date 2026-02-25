@@ -5,5 +5,5 @@ import { generateSlug } from "random-word-slugs";
  * Example output: "happy-flying-project"
  */
 export function generateProjectTitle() {
-  return generateSlug(4, { format: "kebab" });
+  return generateSlug(2, { format: "kebab" });
 }
