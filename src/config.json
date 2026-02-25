@@ -1,0 +1,52 @@
+{
+  "app": {
+    "theme": {
+      "default": "vercel",
+      "options": [
+        { "value": "latte", "label": "Latte", "appearance": "light" },
+        { "value": "frappe", "label": "Frappe", "appearance": "dark" },
+        { "value": "macchiato", "label": "Macchiato", "appearance": "dark" },
+        { "value": "mocha", "label": "Mocha", "appearance": "dark" },
+        { "value": "ayu-light", "label": "Ayu Light", "appearance": "light" },
+        { "value": "ayu-dark", "label": "Ayu Dark", "appearance": "dark" },
+        {
+          "value": "github-dark",
+          "label": "GitHub Dark",
+          "appearance": "dark"
+        },
+        { "value": "vercel", "label": "Vercel", "appearance": "dark" },
+        { "value": "dia", "label": "Dia", "appearance": "light" },
+        { "value": "dia-dark", "label": "Dia Dark", "appearance": "dark" },
+        { "value": "windows-xp", "label": "Windows XP", "appearance": "light" },
+        { "value": "perplexity", "label": "Perplexity", "appearance": "dark" },
+        { "value": "gsap", "label": "GSAP", "appearance": "dark" }
+      ]
+    },
+    "projects": {
+      "rateLimits": {},
+
+      "maxProjectPerUser": {
+        "free": 3,
+        "pro": 10,
+        "enterprise": 100
+      },
+
+      "maxTeamMembers": {
+        "free": 2,
+        "pro": 10,
+        "enterprise": 100
+      },
+
+      "query": {
+        "defaults": {
+          "limit": 10,
+          "allProjectsLimit": 50,
+          "offset": 0,
+          "orderBy": "createdAt",
+          "orderDirection": "desc",
+          "search": ""
+        }
+      }
+    }
+  }
+}
