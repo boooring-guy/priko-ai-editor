@@ -14,13 +14,13 @@ import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -54,7 +54,11 @@ const createProjectSchema = z.object({
 
 type CreateProjectValues = z.infer<typeof createProjectSchema>;
 
-export const CreateProjectModal = () => {
+export const CreateProjectModal = ({
+  children,
+}: {
+  children?: React.ReactNode;
+}) => {
   const [open, setOpen] = useState(false);
   const { mutate: createProject, isPending } = useCreateProject();
 
@@ -76,6 +80,17 @@ export const CreateProjectModal = () => {
     }
   }, [open, form]);
 
+  useEffect(() => {
+    const down = (e: KeyboardEvent) => {
+      if (e.key === "j" && (e.metaKey || e.ctrlKey)) {
+        e.preventDefault();
+        setOpen((open) => !open);
+      }
+    };
+    document.addEventListener("keydown", down);
+    return () => document.removeEventListener("keydown", down);
+  }, []);
+
   const onSubmit = (values: CreateProjectValues) => {
     createProject(values, {
       onSuccess: () => {
@@ -92,25 +107,26 @@ export const CreateProjectModal = () => {
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button size="sm" className="gap-2">
-          <Plus className="size-4" />
-          Create Project
-        </Button>
-      </DialogTrigger>
-      <DialogContent className="sm:max-w-106.25">
-        <DialogHeader>
-          <DialogTitle>Create Project</DialogTitle>
-          <DialogDescription>
+    <Sheet open={open} onOpenChange={setOpen}>
+      <SheetTrigger asChild>
+        {children ? (
+          children
+        ) : (
+          <Button size="sm" className="gap-2">
+            <Plus className="size-4" />
+            Create Project
+          </Button>
+        )}
+      </SheetTrigger>
+      <SheetContent className="overflow-y-auto p-6 sm:w-1/2 sm:max-w-none">
+        <SheetHeader className="p-0">
+          <SheetTitle>Create Project</SheetTitle>
+          <SheetDescription>
             Create a new project to start collaborating.
-          </DialogDescription>
-        </DialogHeader>
+          </SheetDescription>
+        </SheetHeader>
         <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-4 py-4"
-          >
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <FormField
               control={form.control}
               name="name"
@@ -205,7 +221,7 @@ export const CreateProjectModal = () => {
             </div>
           </form>
         </Form>
-      </DialogContent>
-    </Dialog>
+      </SheetContent>
+    </Sheet>
   );
 };
