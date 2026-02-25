@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.5.0](https://github.com/boooring-guy/priko-ai-editor/compare/v0.4.0...v0.5.0) (2026-02-25)
+
+
+### Features
+
+* **app:** add all-projects page and update home page layout ([076841a](https://github.com/boooring-guy/priko-ai-editor/commit/076841a5da1324c07d6620621a8c3deb9fcc44cd))
+* **config:** add app-wide configuration file ([4fdc03c](https://github.com/boooring-guy/priko-ai-editor/commit/4fdc03c951203644e77c0f91496a8d6c7e11ae84))
+* **db:** update projects schema with import and export fields ([7566e38](https://github.com/boooring-guy/priko-ai-editor/commit/7566e38902b08f78c1cf2b028974e2e4785fa6e4))
+* **projects:** add projects view with data table, skeleton, and error states ([6cea85c](https://github.com/boooring-guy/priko-ai-editor/commit/6cea85c693fc407e080e561df7d49c368de52dda))
+* **projects:** add server query and update hooks for project listing ([2430c41](https://github.com/boooring-guy/priko-ai-editor/commit/2430c41d41e86d1f29cda49b678e2c2641079dc3))
+* **theme:** refactor theme-switcher to use config-driven options ([2e80a6d](https://github.com/boooring-guy/priko-ai-editor/commit/2e80a6d88a0d619f2768e7506e9dadff54728b52))
+* **ui:** add reusable DataTable and TablePagination components ([5457f6d](https://github.com/boooring-guy/priko-ai-editor/commit/5457f6dd9b2929e2a021bf282740568dc1262eab))
+
+
+### Bug Fixes
+
+* **ui:** minor fixes to shadcn primitives and utility functions ([5ab3bbe](https://github.com/boooring-guy/priko-ai-editor/commit/5ab3bbe502439fc6ad292f39f7399ea0311269a1))
+
 ## [0.4.0](https://github.com/boooring-guy/priko-ai-editor/compare/v0.3.0...v0.4.0) (2026-02-20)
 
 
