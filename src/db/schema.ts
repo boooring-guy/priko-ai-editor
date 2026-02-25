@@ -108,10 +108,24 @@ export const accountRelations = relations(account, ({ one }) => ({
   }),
 }));
 
-export const importStatuses = ["importing", "completed", "failed"] as const;
+export const importStatuses = [
+  "importing",
+  "completed",
+  "failed",
+  "cancelled",
+] as const;
 export type ImportStatus = (typeof importStatuses)[number];
 
+export const exportStatuses = [
+  "exporting",
+  "completed",
+  "failed",
+  "cancelled",
+] as const;
+export type ExportStatus = (typeof exportStatuses)[number];
+
 export const importStatusEnum = pgEnum("import_status", importStatuses);
+export const exportStatusEnum = pgEnum("export_status", exportStatuses);
 export const projects = pgTable(
   "projects",
   {
@@ -123,14 +137,22 @@ export const projects = pgTable(
     importStatus: importStatusEnum("import_status")
       .default("importing")
       .notNull(),
+
+    ownerId: text("user_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+    exportStatus: exportStatusEnum("export_status")
+      .default("exporting")
+      .notNull(),
+    exportRepoUrl: text("export_repo_url"),
+    isDeleted: boolean("is_deleted").default(false).notNull(),
+
+    // timestamps
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at")
       .defaultNow()
       .$onUpdate(() => /* @__PURE__ */ new Date())
       .notNull(),
-    ownerId: text("user_id")
-      .notNull()
-      .references(() => user.id, { onDelete: "cascade" }),
   },
   (table) => [index("by_owner_id").on(table.ownerId)],
 );
