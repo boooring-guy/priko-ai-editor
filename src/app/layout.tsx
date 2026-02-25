@@ -7,6 +7,7 @@ import "./globals.css";
 const googleSans = Google_Sans({
   variable: "--font-google-sans",
   subsets: ["latin"],
+  fallback: ["sans-serif"],
 });
 
 const JetBrainsMono = JetBrains_Mono({

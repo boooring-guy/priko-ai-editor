@@ -11,6 +11,7 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  allowedDevOrigins: ["tunnel.pro-track.app", "localhost:3000"],
 };
 
 export default nextConfig;

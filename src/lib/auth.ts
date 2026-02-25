@@ -11,6 +11,16 @@ export const auth = betterAuth({
   database: drizzleAdapter(db, {
     provider: "pg",
   }),
+  trustedOrigins: [
+    "http://localhost:3000",
+    "https://tunnel.pro-track.app",
+    "*.pro-track.app",
+  ],
+  advanced: {
+    crossSubDomainCookies: {
+      enabled: true,
+    },
+  },
   plugins: [
     emailOTP({
       async sendVerificationOTP({ email, otp, type }) {

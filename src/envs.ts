@@ -12,6 +12,15 @@ const envSchema = z.object({
   AWS_SECRET_ACCESS_KEY: z.string(),
   AWS_REGION: z.string(),
   AWS_S3_BUCKET: z.string(),
+  FIRECRAWL_API_KEY: z.string(),
+  GOOGLE_API_KEY: z.string().optional(),
+  OPEN_AI_API_KEY: z.string().optional(),
+  ANTHROPIC_API_KEY: z.string().optional(),
+  ALIYUN_API_KEY: z.string().optional(),
+  GOOGLE_VERTEX_PROJECT: z.string().optional(),
+  GOOGLE_VERTEX_PROJECT_ID: z.string().optional(),
+  GOOGLE_VERTEX_LOCATION: z.string().optional(),
+  VERTEX_API_KEY: z.string().optional(),
 });
 
 // parse check

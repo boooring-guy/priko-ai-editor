@@ -74,7 +74,7 @@ export const SignUpCard = () => {
   };
 
   return (
-    <Card className="w-full h-full md:w-[487px]">
+    <Card className="w-full h-full md:w-121.75">
       <CardHeader>
         <CardTitle>Create an account</CardTitle>
         <CardDescription>
