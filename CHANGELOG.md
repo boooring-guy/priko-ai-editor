@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.6.0](https://github.com/boooring-guy/priko-ai-editor/compare/v0.5.0...v0.6.0) (2026-02-26)
+
+
+### Features
+
+* **auth:** refactor user button to dropdown menu and apply typography ([ae2a30a](https://github.com/boooring-guy/priko-ai-editor/commit/ae2a30a9d60f28222f4e86a9884fd77dc3d23d94))
+* **layout:** add header, breadcrumbs, global shortcuts, and 404 page ([ad50ffc](https://github.com/boooring-guy/priko-ai-editor/commit/ad50ffcfe9382156b1cfa482d05134430f1b1d65))
+* **projects:** add project workspace with split panes and Jotai state ([5809567](https://github.com/boooring-guy/priko-ai-editor/commit/580956717ead34a5c47223e44b8bafac9e735707))
+* **theme:** add new themes and integrate Jotai for state sync ([0e2be28](https://github.com/boooring-guy/priko-ai-editor/commit/0e2be28d8dc9340313a195ba286ac39db70594b9))
+* **ui:** update typography system and refine shadcn primitives ([ee98325](https://github.com/boooring-guy/priko-ai-editor/commit/ee98325beb5c6532f7085b42769672cf2d4b3c16))
+
 ## [0.5.0](https://github.com/boooring-guy/priko-ai-editor/compare/v0.4.0...v0.5.0) (2026-02-25)
 
 
