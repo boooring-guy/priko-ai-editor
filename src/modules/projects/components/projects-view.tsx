@@ -1,22 +1,21 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { queryClient } from "@/components/providers";
-import { queryKeys } from "@/lib/query-keys";
+import { formatDistanceToNow } from "date-fns";
 import Link from "next/link";
-import { CreateProjectModal } from "./create-project-modal";
-import { GoPlus, GoDesktopDownload, GoSync, GoRepo } from "react-icons/go";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import { GoDesktopDownload, GoPlus, GoRepo, GoSync } from "react-icons/go";
+import { toast } from "sonner";
+import { queryClient } from "@/components/providers";
 import { Button } from "@/components/ui/button";
 import {
   ButtonGroup,
   ButtonGroupSeparator,
 } from "@/components/ui/button-group";
-import { ProjectsDataTable } from "./projects-data-table";
 import { CommandShortcut } from "@/components/ui/command";
-import { useEffect } from "react";
-import { toast } from "sonner";
-import { formatDistanceToNow } from "date-fns";
-import { useGetAllProjects } from "../hooks";
+import { queryKeys } from "@/lib/query-keys";
+import { CreateProjectModal } from "./create-project-modal";
+import { ProjectsDataTable } from "./projects-data-table";
 
 export const ProjectsView = () => {
   const router = useRouter();
@@ -39,12 +38,11 @@ export const ProjectsView = () => {
   return (
     <div className="flex flex-col md:flex-row items-start mt-6 h-[calc(100vh-8rem)]">
       {/* Left Column: Sidebar with Quick Actions and Recent Project */}
-      <aside className="w-full md:w-64 shrink-0 flex flex-col gap-6 border-r pr-6 md:h-full md:sticky md:top-6">
+      <aside className="w-full md:w-64 shrink-0 flex flex-col gap-6 pr-6 md:h-full md:sticky md:top-6">
         <div className="flex flex-col gap-4">
-          <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider px-1">
+          <h2 className="text-label text-muted-foreground uppercase px-1">
             Start
           </h2>
-
           <ButtonGroup
             orientation="vertical"
             className="flex-col !w-full shadow-sm [&_button]:w-full"
@@ -84,7 +82,7 @@ export const ProjectsView = () => {
       {/* Right Column: Projects Data Table */}
       <div className="flex-1 w-full flex flex-col gap-4 pl-0 md:pl-6 h-full overflow-hidden">
         <div className="flex items-center justify-between px-1">
-          <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
+          <h2 className="text-label text-muted-foreground uppercase px-1">
             Projects
           </h2>
           <div className="flex items-center gap-2">
@@ -109,7 +107,7 @@ export const ProjectsView = () => {
               <span className="sr-only">Refresh projects</span>
             </Button>
             <Button variant="secondary" size="sm" asChild className="h-8 gap-1">
-              <Link href="/all-projects">
+              <Link href="/projects">
                 View All
                 <CommandShortcut className="ml-1 tracking-widest text-muted-foreground">
                   ⌘L
@@ -125,46 +123,38 @@ export const ProjectsView = () => {
   );
 };
 
-const RecentProjectSection = () => {
-  const { data, isPending } = useGetAllProjects({
-    limit: 1,
-    offset: 0,
-    orderBy: "updatedAt",
-    orderDirection: "desc",
-  });
+import { useAtomValue } from "jotai";
+import { activeProjectAtom } from "../store/project-atoms";
 
-  const recentProject = data?.data?.[0];
+const RecentProjectSection = () => {
+  const activeProject = useAtomValue(activeProjectAtom);
 
   return (
-    <div className="flex flex-col gap-3">
-      <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider px-1">
+    <div className="flex flex-col gap-3  max-sm:mb-10">
+      <h2 className="text-label text-muted-foreground uppercase px-1">
         Recent Project
       </h2>
 
-      {isPending ? (
-        <div className="w-full h-16 rounded-md bg-muted/50 animate-pulse border shadow-sm"></div>
-      ) : recentProject ? (
+      {activeProject ? (
         <Link
-          href={`/projects/${recentProject.id}`}
+          href={`/projects/${activeProject.username}/${activeProject.projectname}`}
           className="group flex flex-col gap-1 p-3 rounded-md border bg-card hover:bg-accent hover:text-accent-foreground transition-colors shadow-sm"
         >
           <div className="flex items-center gap-2">
             <div className="p-1.5 rounded-md bg-muted text-muted-foreground group-hover:bg-background group-hover:text-foreground transition-colors">
               <GoRepo className="size-3.5" />
             </div>
-            <span className="font-medium text-sm truncate">
-              {recentProject.name}
-            </span>
+            <span className="text-label truncate">{activeProject.name}</span>
           </div>
-          <span className="text-xs text-muted-foreground pl-8 truncate">
-            {formatDistanceToNow(new Date(recentProject.updatedAt), {
+          <span className="text-caption text-muted-foreground pl-8 truncate">
+            {formatDistanceToNow(new Date(activeProject.updatedAt), {
               addSuffix: true,
             })}
           </span>
         </Link>
       ) : (
-        <div className="text-sm text-muted-foreground px-1 py-2 italic">
-          No projects found.
+        <div className="text-body-sm text-muted-foreground px-1 py-2 italic">
+          No recent project.
         </div>
       )}
     </div>

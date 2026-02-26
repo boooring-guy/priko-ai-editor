@@ -1,32 +1,29 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import { queryKeys } from "@/lib/query-keys";
-import { getAllProjects } from "../server/get-projects";
-import { type ColumnDef, type SortingState } from "@tanstack/react-table";
+import type { SortingState } from "@tanstack/react-table";
 import { formatDistanceToNow } from "date-fns";
+import { useSetAtom } from "jotai";
 import {
-  CopyIcon,
-  ExternalLinkIcon,
-  MoreHorizontalIcon,
-  TrashIcon,
-  ArrowUpDown,
+  Activity,
   ArrowDown,
   ArrowUp,
-  Github,
-  Folder,
+  ArrowUpDown,
   Calendar,
-  Activity,
+  CopyIcon,
+  ExternalLinkIcon,
+  Folder,
+  Github,
+  MoreHorizontalIcon,
+  TrashIcon,
 } from "lucide-react";
-import { Spinner } from "@/components/ui/spinner";
-
-import { useGetAllProjects } from "../hooks";
-import { DataTable } from "@/components/ui/data-table";
-import { ProjectsTableSkeleton } from "./projects-table-skeleton";
-import { ProjectsTableError } from "./projects-table-error";
-import config from "@/config.json";
+import { useRouter } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
+import { GoRepo } from "react-icons/go";
+import { toast } from "sonner";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { DataTable } from "@/components/ui/data-table";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -35,17 +32,31 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Badge } from "@/components/ui/badge";
-import { GoRepo, GoSync } from "react-icons/go";
+import { Spinner } from "@/components/ui/spinner";
+import config from "@/config.json";
 import type { ProjectSelect } from "@/db/schema";
-import { toast } from "sonner";
+import { queryKeys } from "@/lib/query-keys";
+import { useGetAllProjects } from "../hooks";
+import { getAllProjects } from "../server/get-projects";
+import { activeProjectAtom } from "../store/project-atoms";
+import { ProjectsTableError } from "./projects-table-error";
+import { ProjectsTableSkeleton } from "./projects-table-skeleton";
 
 export const ProjectsDataTable = ({
   defaultLimit,
 }: {
   defaultLimit?: number;
 } = {}) => {
-  const queryDefaults = config.app.projects.query.defaults;
+  const queryDefaults = (
+    (config as any).projects || (config as any).app?.projects
+  )?.query?.defaults || {
+    limit: 10,
+    search: "",
+    orderBy: "createdAt",
+    orderDirection: "desc",
+  };
+  const router = useRouter();
+  const setActiveProject = useSetAtom(activeProjectAtom);
 
   const [pagination, setPagination] = useState({
     pageIndex: 0,
@@ -112,11 +123,12 @@ export const ProjectsDataTable = ({
     queryClient,
   ]);
 
-  const columns = useMemo<ColumnDef<ProjectSelect>[]>(
+  const columns: any[] = useMemo(
     () => [
       {
         accessorKey: "name",
-        header: ({ column }) => {
+        accessorFn: (row: ProjectSelect) => row.name,
+        header: ({ column }: { column: any }) => {
           return (
             <Button
               variant="ghost"
@@ -137,7 +149,7 @@ export const ProjectsDataTable = ({
             </Button>
           );
         },
-        cell: ({ row }) => {
+        cell: ({ row }: { row: { original: ProjectSelect } }) => {
           const isGithubProject = !!row.original.exportRepoUrl;
           const isImporting = row.original.importStatus === "importing";
 
@@ -168,7 +180,8 @@ export const ProjectsDataTable = ({
       },
       {
         accessorKey: "createdAt",
-        header: ({ column }) => {
+        accessorFn: (row: ProjectSelect) => row.createdAt,
+        header: ({ column }: { column: any }) => {
           return (
             <Button
               variant="ghost"
@@ -189,7 +202,7 @@ export const ProjectsDataTable = ({
             </Button>
           );
         },
-        cell: ({ row }) => {
+        cell: ({ row }: { row: { original: ProjectSelect } }) => {
           return (
             <span className="text-sm text-muted-foreground whitespace-nowrap">
               {formatDistanceToNow(new Date(row.original.createdAt), {
@@ -201,7 +214,8 @@ export const ProjectsDataTable = ({
       },
       {
         accessorKey: "importStatus",
-        header: ({ column }) => {
+        accessorFn: (row: ProjectSelect) => row.importStatus,
+        header: ({ column }: { column: any }) => {
           return (
             <Button
               variant="ghost"
@@ -222,7 +236,7 @@ export const ProjectsDataTable = ({
             </Button>
           );
         },
-        cell: ({ row }) => {
+        cell: ({ row }: { row: { original: ProjectSelect } }) => {
           const status = row.original.importStatus;
           const variants: Record<
             string,
@@ -246,7 +260,9 @@ export const ProjectsDataTable = ({
       },
       {
         id: "actions",
-        cell: ({ row }) => {
+        accessorKey: "id", // Adding this to satisfy the strict ColumnDef typing
+        enableHiding: false,
+        cell: ({ row }: { row: { original: ProjectSelect } }) => {
           const project = row.original;
           return (
             <DropdownMenu>
@@ -298,7 +314,7 @@ export const ProjectsDataTable = ({
   return (
     <div className="w-full">
       <DataTable
-        columns={columns}
+        columns={columns as any}
         data={projects}
         pageCount={pageCount}
         totalItems={totalCount}
@@ -310,7 +326,15 @@ export const ProjectsDataTable = ({
         onSearchChange={setSearch}
         searchPlaceholder="Search projects..."
         onRowClick={(row) => {
-          // Future use
+          const username = row.owner.username ?? "";
+          setActiveProject({
+            id: row.id,
+            name: row.name,
+            username,
+            projectname: row.name,
+            updatedAt: row.updatedAt.toISOString(),
+          });
+          router.push(`/projects/${username}/${row.name}`);
         }}
       />
     </div>

@@ -1,9 +1,9 @@
 "use server";
 
-import { db } from "@/db";
-import { projects, ProjectInsert } from "@/db/schema";
-import { getCurrentUser } from "@/modules/auth/server/get-current-user";
 import { and, eq } from "drizzle-orm";
+import { db } from "@/db";
+import { projects } from "@/db/schema";
+import { getCurrentUser } from "@/modules/auth/server/get-current-user";
 import { generateProjectTitle } from "../../../utils/project-title";
 
 export interface CreateProjectInput {

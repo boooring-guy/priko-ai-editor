@@ -1,5 +1,11 @@
 "use client";
 
+import { GoSearch } from "react-icons/go";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupText,
+} from "@/components/ui/input-group";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   Table,
@@ -9,12 +15,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupText,
-} from "@/components/ui/input-group";
-import { GoSearch } from "react-icons/go";
 
 export function ProjectsTableSkeleton() {
   return (
