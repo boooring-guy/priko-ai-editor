@@ -68,7 +68,7 @@ export interface Part {
   text: string;
 }
 
-export interface GenerationConfig {}
+export type GenerationConfig = {};
 
 export interface Response2 {
   body: Body2;

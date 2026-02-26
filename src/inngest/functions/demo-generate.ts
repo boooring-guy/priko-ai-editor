@@ -1,11 +1,11 @@
+import { generateText } from "ai";
 import { inngestClient } from "@/inngest/client";
 import { INNGEST } from "@/inngest/keys";
-import { aliyunAI, openAI, googleAI } from "@/modules/ai/ai-providers";
-import { generateText } from "ai";
+import { googleAI } from "@/modules/ai/ai-providers";
 import { firecrawl } from "@/utils/firecrawl";
 
 const URL_REGEX =
-  /https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&//=]*)/g;
+  /https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_+.~#?&//=]*)/g;
 
 export const demoGenerate = inngestClient.createFunction(
   {
