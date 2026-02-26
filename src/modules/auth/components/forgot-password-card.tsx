@@ -1,5 +1,10 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Loader2, Mail } from "lucide-react";
+import Link from "next/link";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -23,11 +28,6 @@ import {
   InputGroupInput,
   InputGroupText,
 } from "@/components/ui/input-group";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader2, Mail } from "lucide-react";
-import Link from "next/link";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { useForgotPassword } from "../api/use-forgot-password";
 
 export const forgotPasswordSchema = z.object({

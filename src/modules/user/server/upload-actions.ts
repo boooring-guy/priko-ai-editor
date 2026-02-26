@@ -1,7 +1,6 @@
 "use server";
 
 import { uploadFileToS3 } from "@/lib/s3";
-import { nanoid } from "nanoid"; // Assuming nanoid or similar is available, or use crypto.randomUUID()
 
 export async function uploadPublicFile(formData: FormData) {
   const file = formData.get("file") as File;

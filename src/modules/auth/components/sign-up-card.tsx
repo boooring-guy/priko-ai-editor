@@ -1,8 +1,11 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { AtSign, Eye, EyeOff, Loader2, Lock, Mail, User } from "lucide-react";
 import Link from "next/link";
-import { AvatarUpload } from "@/modules/user/components/avatar-upload";
-
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -26,11 +29,7 @@ import {
   InputGroupInput,
   InputGroupText,
 } from "@/components/ui/input-group";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { AtSign, Eye, EyeOff, Loader2, Lock, Mail, User } from "lucide-react";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { AvatarUpload } from "@/modules/user/components/avatar-upload";
 import { useSignUp } from "../api/use-sign-up";
 
 export const signUpSchema = z.object({
@@ -255,7 +254,7 @@ export const SignUpCard = () => {
         </Form>
       </CardContent>
       <CardFooter className="flex justify-center flex-col gap-4">
-        <p className="text-sm text-muted-foreground text-center">
+        <p className="text-body-sm text-muted-foreground text-center">
           Already have an account?{" "}
           <Link href="/sign-in" className="text-primary hover:underline">
             Sign in

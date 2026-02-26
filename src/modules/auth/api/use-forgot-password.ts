@@ -1,11 +1,11 @@
-import { authClient } from "@/lib/auth-client";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { authClient } from "@/lib/auth-client";
 
 export const useForgotPassword = () => {
   const resetPasswordMutation = useMutation({
     mutationFn: async ({ email }: { email: string }) => {
-      // @ts-ignore
+      // @ts-expect-error
       const { data, error } = await authClient.forgetPassword({
         email,
         redirectTo: "/reset-password",
