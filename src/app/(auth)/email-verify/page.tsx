@@ -1,9 +1,9 @@
 "use client";
 
-import { EmailVerifyCard } from "@/modules/auth/components/email-verify-card";
-import { UnauthGuard } from "@/modules/auth/components/unauth-guard";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect } from "react";
+import { EmailVerifyCard } from "@/modules/auth/components/email-verify-card";
+import { UnauthGuard } from "@/modules/auth/components/unauth-guard";
 
 function EmailVerifyContent() {
   const searchParams = useSearchParams();

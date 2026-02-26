@@ -1,13 +1,12 @@
 "use client";
 
-import { version } from "../../package.json";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React from "react";
-import { ThemeSwitcher } from "@/components/theme-switcher";
+import { Header } from "@/components/layout/header";
 import { useCurrentUser } from "@/modules/auth/api/use-current-user";
-import { UserButton } from "@/modules/auth/components/user-button";
 import { ProjectsView } from "@/modules/projects/components/projects-view";
+import { version } from "../../package.json";
 
 export default function Home() {
   const router = useRouter();
@@ -33,24 +32,15 @@ export default function Home() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <header className="flex justify-between items-center border-b p-4 px-8 shadow-sm">
-        <div className="flex items-center gap-2">
-          <h1 className="text-xl font-bold tracking-tight">Priko Workspace</h1>
-          <span className="text-xs text-muted-foreground">v{version}</span>
-        </div>
-        <div className="flex items-center gap-3">
-          <ThemeSwitcher />
-          <UserButton />
-        </div>
-      </header>
+      <Header />
 
       <main className="p-8 flex-1">
         <div className="max-w-4xl mx-auto space-y-8">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">
+            <h1 className="text-title-lg font-bold tracking-tight">
               Welcome, {session.user.name.split(" ")[0]}!
             </h1>
-            <p className="text-muted-foreground mt-2">
+            <p className="text-body text-muted-foreground mt-2">
               This is your simple test paragraph. Below is some application
               info.
             </p>
