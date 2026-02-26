@@ -1,9 +1,11 @@
 "use client";
 
+import { useSetAtom } from "jotai";
 import {
   Check,
   Cloud,
   Github,
+  MessageCircle,
   Monitor,
   Moon,
   Palette,
@@ -26,6 +28,7 @@ import {
 } from "@/components/ui/command";
 import { type AppTheme, DEFAULT_THEME, THEME_OPTIONS } from "@/lib/themes";
 import { cn } from "@/lib/utils";
+import { themeAtom } from "@/modules/projects/store/project-atoms";
 
 const THEME_ICONS: Partial<
   Record<AppTheme, React.ComponentType<{ className?: string }>>
@@ -42,28 +45,44 @@ const THEME_ICONS: Partial<
   "dia-dark": Moon,
   "windows-xp": Monitor,
   gsap: Zap,
+  discord: MessageCircle,
+  "discord-light": MessageCircle,
+  "discord-midnight": MessageCircle,
+  linear: Triangle,
+  "linear-light": Triangle,
+  "linear-midnight": Triangle,
+  duolingo: Sparkles,
+  pineapple: Sparkles,
+  "pineapple-dark": Moon,
+  xcode: Monitor,
+  "xcode-dark": Monitor,
   "gsap-inspired": Zap,
 };
 
 export function ThemeSwitcher() {
-  const { theme, setTheme } = useTheme();
-  const [mounted, setMounted] = React.useState(false);
+  const { theme, setTheme: setNextTheme } = useTheme();
+  const setJotaiTheme = useSetAtom(themeAtom);
   const [open, setOpen] = React.useState(false);
 
-  React.useEffect(() => {
-    setMounted(true);
-  }, []);
+  const setTheme = React.useCallback(
+    (value: string) => {
+      setNextTheme(value); // drives DOM class + next-themes state immediately
+      setJotaiTheme(value as AppTheme); // keeps Jotai atom in sync
+    },
+    [setNextTheme, setJotaiTheme],
+  );
+
+  const [mounted, setMounted] = React.useState(false);
+  React.useEffect(() => setMounted(true), []);
 
   React.useEffect(() => {
-    const down = (e: KeyboardEvent) => {
-      if (e.key === "t" && (e.metaKey || e.ctrlKey)) {
-        e.preventDefault();
-        setOpen((open) => !open);
-      }
+    const handleToggle = () => setOpen((open) => !open);
+
+    window.addEventListener("toggle-theme-switcher", handleToggle);
+
+    return () => {
+      window.removeEventListener("toggle-theme-switcher", handleToggle);
     };
-
-    document.addEventListener("keydown", down);
-    return () => document.removeEventListener("keydown", down);
   }, []);
 
   const activeTheme = ((mounted ? theme : DEFAULT_THEME) ?? DEFAULT_THEME) as
@@ -83,11 +102,11 @@ export function ThemeSwitcher() {
       <Button
         variant="outline"
         size="icon"
-        className="relative"
+        className="relative hover:ring-2 hover:ring-offset-2 hover:ring-ring transition-all"
         aria-label="Toggle theme"
         onClick={() => setOpen(true)}
       >
-        <ActiveThemeIcon className="h-[1.2rem] w-[1.2rem]" />
+        <ActiveThemeIcon className="h-[1.2rem] w-[1.2rem] transition-all" />
       </Button>
       <CommandDialog
         open={open}
