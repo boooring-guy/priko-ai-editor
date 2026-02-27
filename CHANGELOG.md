@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.6.1](https://github.com/boooring-guy/priko-ai-editor/compare/v0.6.0...v0.6.1) (2026-02-27)
+
+
+### Features
+
+* improve project loading and workspace layout, and enhance global shortcut handling by ignoring editable elements. ([42daa77](https://github.com/boooring-guy/priko-ai-editor/commit/42daa77afa3a7d89afa2573eddfbe058a54bca0f))
+
 ## [0.6.0](https://github.com/boooring-guy/priko-ai-editor/compare/v0.5.0...v0.6.0) (2026-02-26)
 
 
