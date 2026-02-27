@@ -1,9 +1,9 @@
 "use server";
 
+import { and, asc, count, desc, eq, ilike } from "drizzle-orm";
 import { db } from "@/db";
-import { getCurrentUser } from "../../auth/server/get-current-user";
 import { projects } from "../../../db/schema";
-import { and, desc, asc, eq, ilike, count } from "drizzle-orm";
+import { getCurrentUser } from "../../auth/server/get-current-user";
 
 export interface GetAllProjectsArgs {
   limit: number;
@@ -43,13 +43,27 @@ export const getAllProjects = async ({
 
   const orderFn = orderDirection === "asc" ? asc : desc;
 
-  const allProjects = await db
-    .select()
-    .from(projects)
-    .where(whereCondition)
-    .limit(limit)
-    .offset(offset)
-    .orderBy(orderFn(sortColumn));
+  // const allProjects = await db
+  //   .select()
+  //   .from(projects)
+  //   .where(whereCondition)
+  //   .limit(limit)
+  //   .offset(offset)
+  //   .orderBy(orderFn(sortColumn));
+
+  const allProjects = await db.query.projects.findMany({
+    where: whereCondition,
+    limit,
+    offset,
+    orderBy: orderFn(sortColumn),
+    with: {
+      owner: {
+        columns: {
+          username: true,
+        },
+      },
+    },
+  });
 
   return {
     data: allProjects,

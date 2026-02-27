@@ -1,12 +1,12 @@
-import { signUp } from "@/lib/auth-client";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { signUp } from "@/lib/auth-client";
 import { uploadPublicFile } from "@/modules/user/server/upload-actions";
-import { SignUpValues } from "../components/sign-up-card";
+import type { SignUpValues } from "../components/sign-up-card";
 
 export const useSignUp = () => {
-  const queryClient = useQueryClient();
+  const _queryClient = useQueryClient();
   const router = useRouter();
 
   const signUpMutation = useMutation({

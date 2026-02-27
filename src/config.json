@@ -1,5 +1,34 @@
 {
   "app": {
+    "editor": {
+      "layout": {
+        "leftPane": {
+          "defaultSize": 20,
+          "minSize": 15,
+          "collapsedSize": 0
+        },
+        "rightPane": {
+          "defaultSize": 25,
+          "minSize": 15,
+          "collapsedSize": 0
+        },
+        "centerPane": {
+          "defaultSize": 55,
+          "minSize": 30
+        },
+        "centerSplit": {
+          "editor": {
+            "defaultSize": 70,
+            "minSize": 30
+          },
+          "terminal": {
+            "defaultSize": 30,
+            "minSize": 10,
+            "collapsedSize": 0
+          }
+        }
+      }
+    },
     "theme": {
       "default": "vercel",
       "options": [
@@ -19,7 +48,38 @@
         { "value": "dia-dark", "label": "Dia Dark", "appearance": "dark" },
         { "value": "windows-xp", "label": "Windows XP", "appearance": "light" },
         { "value": "perplexity", "label": "Perplexity", "appearance": "dark" },
-        { "value": "gsap", "label": "GSAP", "appearance": "dark" }
+        { "value": "gsap", "label": "GSAP", "appearance": "dark" },
+        { "value": "discord", "label": "Discord", "appearance": "dark" },
+        {
+          "value": "discord-light",
+          "label": "Discord Light",
+          "appearance": "light"
+        },
+        {
+          "value": "discord-midnight",
+          "label": "Discord Midnight",
+          "appearance": "dark"
+        },
+        { "value": "linear", "label": "Linear", "appearance": "dark" },
+        {
+          "value": "linear-light",
+          "label": "Linear Light",
+          "appearance": "light"
+        },
+        {
+          "value": "linear-midnight",
+          "label": "Linear Midnight",
+          "appearance": "dark"
+        },
+        { "value": "duolingo", "label": "Duolingo", "appearance": "light" },
+        { "value": "pineapple", "label": "Pineapple", "appearance": "light" },
+        {
+          "value": "pineapple-dark",
+          "label": "Pineapple Dark",
+          "appearance": "dark"
+        },
+        { "value": "xcode", "label": "Xcode", "appearance": "light" },
+        { "value": "xcode-dark", "label": "Xcode Dark", "appearance": "dark" }
       ]
     },
     "projects": {

@@ -1,27 +1,21 @@
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import {
+  FileText,
   FolderIcon,
   Loader2,
   Plus,
   RefreshCw,
   X,
-  FileText,
 } from "lucide-react";
 import { useEffect, useState } from "react";
-
-import { cn } from "@/lib/utils";
-
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
 import { Button } from "@/components/ui/button";
+import {
+  ButtonGroup,
+  ButtonGroupSeparator,
+} from "@/components/ui/button-group";
 import {
   Form,
   FormControl,
@@ -31,10 +25,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import {
-  ButtonGroup,
-  ButtonGroupSeparator,
-} from "@/components/ui/button-group";
-import {
   InputGroup,
   InputGroupAddon,
   InputGroupButton,
@@ -42,10 +32,17 @@ import {
   InputGroupText,
   InputGroupTextarea,
 } from "@/components/ui/input-group";
-import { Textarea } from "@/components/ui/textarea";
-import { useCreateProject } from "../hooks";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import { cn } from "@/lib/utils";
 import { generateProjectTitle } from "@/utils/project-title";
-import { toast } from "sonner";
+import { useCreateProject } from "../hooks";
 
 const createProjectSchema = z.object({
   name: z.string().min(1, "Project name is required").max(50),
@@ -78,7 +75,7 @@ export const CreateProjectModal = ({
     if (open && !form.getValues("name")) {
       handleRefreshTitle();
     }
-  }, [open, form]);
+  }, [open, form, handleRefreshTitle]);
 
   useEffect(() => {
     const down = (e: KeyboardEvent) => {

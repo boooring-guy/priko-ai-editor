@@ -7,6 +7,7 @@ import {
   QueryClientProvider,
 } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { Provider as JotaiProvider } from "jotai";
 import { DEFAULT_THEME, THEME_NAMES } from "@/lib/themes";
 import { ThemeProvider } from "./theme-provider";
 
@@ -39,17 +40,19 @@ export function getQueryClient() {
 export const queryClient = getQueryClient();
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
-    <QueryClientProvider client={queryClient}>
-      <ThemeProvider
-        attribute="class"
-        defaultTheme={DEFAULT_THEME}
-        themes={THEME_NAMES}
-        enableSystem={false}
-        disableTransitionOnChange
-      >
-        <TooltipProvider>{children}</TooltipProvider>
-      </ThemeProvider>
-      <ReactQueryDevtools initialIsOpen={false} />
-    </QueryClientProvider>
+    <JotaiProvider>
+      <QueryClientProvider client={queryClient}>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme={DEFAULT_THEME}
+          themes={THEME_NAMES}
+          enableSystem={false}
+          disableTransitionOnChange
+        >
+          <TooltipProvider>{children}</TooltipProvider>
+        </ThemeProvider>
+        <ReactQueryDevtools initialIsOpen={false} />
+      </QueryClientProvider>
+    </JotaiProvider>
   );
 }

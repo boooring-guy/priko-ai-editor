@@ -1,7 +1,7 @@
-import { authClient } from "@/lib/auth-client";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { authClient } from "@/lib/auth-client";
 
 export const useResetPassword = () => {
   const router = useRouter();
@@ -14,7 +14,6 @@ export const useResetPassword = () => {
       password: string;
       token?: string;
     }) => {
-      // @ts-ignore
       const { data, error } = await authClient.resetPassword({
         newPassword: password,
         token, // if token is undefined, better-auth tries to pull it from the URL

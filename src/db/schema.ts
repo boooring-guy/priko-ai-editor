@@ -1,3 +1,4 @@
+import type { InferInsertModel, InferSelectModel } from "drizzle-orm";
 import { relations } from "drizzle-orm";
 import {
   boolean,
@@ -8,7 +9,7 @@ import {
   timestamp,
 } from "drizzle-orm/pg-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
-import type { InferSelectModel, InferInsertModel } from "drizzle-orm";
+import type { Prettify } from "../type";
 export const user = pgTable("user", {
   id: text("id").primaryKey(),
   name: text("name").notNull(),
@@ -160,7 +161,7 @@ export const projects = pgTable(
 // Relation between Project and other Tables
 export const projectRelations = relations(projects, ({ one }) => ({
   // A project has one user
-  user: one(user, {
+  owner: one(user, {
     fields: [projects.ownerId],
     references: [user.id],
   }),
@@ -170,4 +171,10 @@ export const projectRelations = relations(projects, ({ one }) => ({
 export const projectInsertSchema = createInsertSchema(projects);
 export const projectSelectSchema = createSelectSchema(projects);
 export type ProjectInsert = InferInsertModel<typeof projects>;
-export type ProjectSelect = InferSelectModel<typeof projects>;
+export type ProjectSelect = Prettify<
+  InferSelectModel<typeof projects> & {
+    owner: {
+      username: string;
+    };
+  }
+>;

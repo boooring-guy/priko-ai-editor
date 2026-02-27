@@ -1,15 +1,13 @@
 "use client";
 
-import { version } from "../../../package.json";
-import { Loader2, ArrowLeft } from "lucide-react";
+import { ArrowLeft, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React from "react";
-import { ThemeSwitcher } from "@/components/theme-switcher";
-import { useCurrentUser } from "@/modules/auth/api/use-current-user";
-import { UserButton } from "@/modules/auth/components/user-button";
-import { ProjectsDataTable } from "@/modules/projects/components/projects-data-table";
+import { Header } from "@/components/layout/header";
 import { Button } from "@/components/ui/button";
 import config from "@/config.json";
+import { useCurrentUser } from "@/modules/auth/api/use-current-user";
+import { ProjectsDataTable } from "@/modules/projects/components/projects-data-table";
 
 export default function AllProjectsPage() {
   const router = useRouter();
@@ -35,24 +33,7 @@ export default function AllProjectsPage() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <header className="flex justify-between items-center border-b p-4 px-8 shadow-sm">
-        <div className="flex items-center gap-2">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => router.back()}
-            className="mr-2"
-          >
-            <ArrowLeft className="h-4 w-4" />
-          </Button>
-          <h1 className="text-xl font-bold tracking-tight">All Projects</h1>
-          <span className="text-xs text-muted-foreground">v{version}</span>
-        </div>
-        <div className="flex items-center gap-3">
-          <ThemeSwitcher />
-          <UserButton />
-        </div>
-      </header>
+      <Header />
 
       <main className="p-8 flex-1">
         <div className="max-w-7xl mx-auto space-y-8">

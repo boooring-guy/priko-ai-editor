@@ -1,14 +1,22 @@
 "use client";
 
 import {
-  ColumnDef,
+  type ColumnDef,
   flexRender,
   getCoreRowModel,
+  type PaginationState,
+  type SortingState,
   useReactTable,
-  PaginationState,
-  SortingState,
 } from "@tanstack/react-table";
-
+import { useEffect, useState } from "react";
+import { GoSearch } from "react-icons/go";
+import { TablePagination } from "@/components/shadcn-studio/pagination/table-pagination";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+  InputGroupText,
+} from "@/components/ui/input-group";
 import {
   Table,
   TableBody,
@@ -17,16 +25,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { TablePagination } from "@/components/shadcn-studio/pagination/table-pagination";
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupInput,
-  InputGroupText,
-} from "@/components/ui/input-group";
-import { GoSearch } from "react-icons/go";
-import { useState, useEffect } from "react";
-import { Button } from "./button";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -76,7 +74,7 @@ export function DataTable<TData, TValue>({
     manualPagination: true,
   });
 
-  const [jumpPage, setJumpPage] = useState("");
+  const [_jumpPage, _setJumpPage] = useState("");
   const [localSearch, setLocalSearch] = useState(searchValue || "");
 
   // Debounce search input

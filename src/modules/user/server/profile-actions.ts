@@ -1,11 +1,11 @@
 "use server";
 
-import { getCurrentUser } from "@/modules/auth/server/get-current-user";
-import { uploadFileToS3, deleteFileFromS3 } from "@/lib/s3";
-import { db } from "@/db";
-import { user } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
+import { db } from "@/db";
+import { user } from "@/db/schema";
+import { deleteFileFromS3, uploadFileToS3 } from "@/lib/s3";
+import { getCurrentUser } from "@/modules/auth/server/get-current-user";
 
 export async function updateProfileImage(formData: FormData) {
   const currentUser = await getCurrentUser();

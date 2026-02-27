@@ -1,10 +1,10 @@
+import { betterAuth } from "better-auth";
+import { drizzleAdapter } from "better-auth/adapters/drizzle";
+import { emailOTP, username } from "better-auth/plugins";
 import { db } from "@/db";
 import { envs } from "@/envs";
 import OtpEmail from "@/modules/email/templates/otp-email";
 import WelcomeEmail from "@/modules/email/templates/welcome-email";
-import { betterAuth } from "better-auth";
-import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { emailOTP, username } from "better-auth/plugins";
 import { resend } from "./resend";
 
 export const auth = betterAuth({
@@ -45,7 +45,7 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
     requireEmailVerification: true,
-    sendResetPassword: async ({ user, url }, request) => {
+    sendResetPassword: async ({ user, url }, _request) => {
       try {
         const result = await resend.emails.send({
           from: envs.EMAIL_FROM,

@@ -1,12 +1,13 @@
 import {
+  keepPreviousData,
+  useInfiniteQuery,
   useMutation,
   useQuery,
-  useInfiniteQuery,
-  keepPreviousData,
 } from "@tanstack/react-query";
-import { createProject } from "./server/create-project";
 import { queryKeys } from "@/lib/query-keys";
 import { queryClient } from "../../components/providers";
+import { createProject } from "./server/create-project";
+import { getProject } from "./server/get-project";
 import { getAllProjects } from "./server/get-projects";
 
 // Mutations
@@ -58,5 +59,15 @@ export function useGetInfiniteProjects(
       }
       return undefined;
     },
+  });
+}
+
+export function useGetProject(username: string, projectname: string) {
+  return useQuery({
+    queryKey: queryKeys.projects.scoped("detail", { username, projectname }),
+    queryFn: () => getProject({ username, projectname }),
+    enabled: !!username && !!projectname,
+    // Don't retry on 404-like nulls — treat them as definitive
+    retry: false,
   });
 }

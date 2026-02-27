@@ -2,7 +2,6 @@ import { createGoogleGenerativeAI } from "@ai-sdk/google";
 import { createOpenAI } from "@ai-sdk/openai";
 import { createOpenAICompatible } from "@ai-sdk/openai-compatible";
 import { envs } from "../../envs";
-import { vertex, createVertex } from "@ai-sdk/google-vertex";
 
 export const googleAI = createGoogleGenerativeAI({
   apiKey: envs.GOOGLE_API_KEY,
