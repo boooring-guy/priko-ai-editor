@@ -72,10 +72,10 @@
           "appearance": "dark"
         },
         { "value": "duolingo", "label": "Duolingo", "appearance": "light" },
-        { "value": "pineapple", "label": "pineApple", "appearance": "light" },
+        { "value": "pineapple", "label": "Pineapple", "appearance": "light" },
         {
           "value": "pineapple-dark",
-          "label": "pineApple Dark",
+          "label": "Pineapple Dark",
           "appearance": "dark"
         },
         { "value": "xcode", "label": "Xcode", "appearance": "light" },

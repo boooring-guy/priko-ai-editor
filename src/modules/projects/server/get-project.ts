@@ -2,7 +2,7 @@
 
 import { and, eq } from "drizzle-orm";
 import { db } from "@/db";
-import { projects } from "../../../db/schema";
+import { projects, user } from "../../../db/schema";
 import { getCurrentUser } from "../../auth/server/get-current-user";
 
 export interface GetProjectArgs {
@@ -21,8 +21,23 @@ export const getProject = async ({ username, projectname }: GetProjectArgs) => {
     throw new Error("Unauthorized");
   }
 
+  // Resolve the owner's id by username so we can filter at the DB level,
+  // preventing a name-collision from returning another user's project.
+  const owner = await db.query.user.findFirst({
+    where: eq(user.username, username),
+    columns: { id: true },
+  });
+
+  if (!owner) {
+    return null;
+  }
+
   const project = await db.query.projects.findFirst({
-    where: and(eq(projects.name, projectname), eq(projects.isDeleted, false)),
+    where: and(
+      eq(projects.ownerId, owner.id),
+      eq(projects.name, projectname),
+      eq(projects.isDeleted, false),
+    ),
     with: {
       owner: {
         columns: {
@@ -32,10 +47,5 @@ export const getProject = async ({ username, projectname }: GetProjectArgs) => {
     },
   });
 
-  // Ensure the project's owner matches the username in the URL
-  if (!project || project.owner.username !== username) {
-    return null;
-  }
-
-  return project;
+  return project ?? null;
 };

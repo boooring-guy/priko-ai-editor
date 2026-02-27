@@ -20,10 +20,10 @@
 
 Branch Name : feat/ide-split-pane
 
-- [ ] Projects View - Sidebar, Project List
-- [ ] Dynamic Routing System
-- [ ] IDE split pane
-- [ ] Navbar with project actions and Project Switcher
-- [ ] Editor Setup and Preview Containers
+- [x] Projects View - Sidebar, Project List
+- [x] Dynamic Routing System
+- [x] IDE split pane
+- [x] Navbar with project actions and Project Switcher
+- [x] Editor Setup and Preview Containers
 - [ ] Code and Preview Tab Switching functionality
-- [ ] Maintainece: Commit to Git
+- [x] Maintainece: Commit to Git

@@ -5,6 +5,17 @@ import { useEffect } from "react";
 export function GlobalShortcuts() {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      // Ignore all shortcuts when the user is typing in an editable element
+      const target = e.target as HTMLElement | null;
+      if (
+        target instanceof HTMLInputElement ||
+        target instanceof HTMLTextAreaElement ||
+        target instanceof HTMLSelectElement ||
+        target?.isContentEditable
+      ) {
+        return;
+      }
+
       // Global Theme Switcher Shortcut (Cmd/Ctrl + T)
       if (e.key === "t" && (e.metaKey || e.ctrlKey)) {
         e.preventDefault();

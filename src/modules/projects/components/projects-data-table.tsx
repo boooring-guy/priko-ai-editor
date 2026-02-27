@@ -326,7 +326,13 @@ export const ProjectsDataTable = ({
         onSearchChange={setSearch}
         searchPlaceholder="Search projects..."
         onRowClick={(row) => {
-          const username = row.owner.username ?? "";
+          const username = row.owner?.username;
+          if (!username) {
+            toast.error(
+              "Cannot open project: owner information is unavailable.",
+            );
+            return;
+          }
           setActiveProject({
             id: row.id,
             name: row.name,

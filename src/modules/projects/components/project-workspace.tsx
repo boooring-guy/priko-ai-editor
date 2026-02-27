@@ -18,8 +18,16 @@ export function ProjectWorkspace() {
   const rightPaneRef = useRef<PanelImperativeHandle>(null);
   const bottomPaneRef = useRef<PanelImperativeHandle>(null);
 
-  const layoutCfg =
-    (config as any).editor?.layout || (config as any).app?.editor?.layout;
+  const layoutCfg = (config as any).editor?.layout ??
+    (config as any).app?.editor?.layout ?? {
+      leftPane: { defaultSize: 20, minSize: 15, collapsedSize: 0 },
+      centerPane: { defaultSize: 55, minSize: 30 },
+      rightPane: { defaultSize: 25, minSize: 15, collapsedSize: 0 },
+      centerSplit: {
+        editor: { defaultSize: 70, minSize: 30 },
+        terminal: { defaultSize: 30, minSize: 10, collapsedSize: 0 },
+      },
+    };
 
   // Persist & restore the main horizontal layout (left | center | right)
   const mainLayout = useDefaultLayout({

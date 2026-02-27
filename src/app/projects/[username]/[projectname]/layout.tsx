@@ -25,6 +25,7 @@ export default async function ProjectLayout({
       />
       <div className="flex-1 overflow-hidden">
         <ProjectWorkspace />
+        {children}
       </div>
     </div>
   );
