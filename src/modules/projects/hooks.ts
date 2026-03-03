@@ -9,6 +9,7 @@ import { queryClient } from "../../components/providers";
 import { createProject } from "./server/create-project";
 import { getProject } from "./server/get-project";
 import { getAllProjects } from "./server/get-projects";
+import { renameProject } from "./server/rename-project";
 
 // Mutations
 export function useCreateProject() {
@@ -30,6 +31,24 @@ export function useCreateProject() {
     // onSettled: () => {
     //   queryClient.invalidateQueries({ queryKey: queryKeys.projects.lists() });
     // },
+  });
+}
+
+export function useRenameProject() {
+  return useMutation({
+    mutationFn: renameProject,
+    onSuccess: (_data, variables) => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.projects.lists() });
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.projects.scoped("detail", {
+          username: (variables as any).username,
+          projectname: (variables as any).oldName,
+        }),
+      });
+    },
+    onError: (error) => {
+      console.error("Failed to rename project:", error);
+    },
   });
 }
 

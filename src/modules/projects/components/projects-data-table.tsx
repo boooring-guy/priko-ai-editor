@@ -15,10 +15,11 @@ import {
   Folder,
   Github,
   MoreHorizontalIcon,
+  PencilIcon,
   TrashIcon,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { GoRepo } from "react-icons/go";
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
@@ -36,11 +37,109 @@ import { Spinner } from "@/components/ui/spinner";
 import config from "@/config.json";
 import type { ProjectSelect } from "@/db/schema";
 import { queryKeys } from "@/lib/query-keys";
-import { useGetAllProjects } from "../hooks";
+import { useGetAllProjects, useRenameProject } from "../hooks";
 import { getAllProjects } from "../server/get-projects";
 import { activeProjectAtom } from "../store/project-atoms";
+import { RenameProjectModal } from "./rename-project-modal";
 import { ProjectsTableError } from "./projects-table-error";
 import { ProjectsTableSkeleton } from "./projects-table-skeleton";
+
+// ── Inline-rename cell ──────────────────────────────────────────────────────
+
+function InlineRenameCell({
+  project,
+  onRenameRequest,
+}: {
+  project: ProjectSelect;
+  onRenameRequest: (project: ProjectSelect, newName: string) => void;
+}) {
+  const [editing, setEditing] = useState(false);
+  const [draft, setDraft] = useState(project.name);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const isGithubProject = !!project.exportRepoUrl;
+  const isImporting = project.importStatus === "importing";
+
+  const startEdit = (e: React.MouseEvent) => {
+    // Prevent row-click navigation from firing
+    e.stopPropagation();
+    setDraft(project.name);
+    setEditing(true);
+    setTimeout(() => {
+      if (inputRef.current) {
+        inputRef.current.focus();
+        inputRef.current.select();
+      }
+    }, 30);
+  };
+
+  const commit = () => {
+    const trimmed = draft.trim();
+    if (trimmed && trimmed !== project.name) {
+      onRenameRequest(project, trimmed);
+    }
+    setEditing(false);
+  };
+
+  const cancel = () => {
+    setDraft(project.name);
+    setEditing(false);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      commit();
+    }
+    if (e.key === "Escape") {
+      e.preventDefault();
+      cancel();
+    }
+  };
+
+  return (
+    <div className="flex flex-row items-center gap-3">
+      <div className="p-2 rounded-md bg-muted text-muted-foreground shrink-0">
+        {isImporting ? (
+          <Spinner className="size-4" />
+        ) : isGithubProject ? (
+          <Github className="size-4" />
+        ) : (
+          <GoRepo className="size-4" />
+        )}
+      </div>
+      <div className="flex flex-col min-w-0">
+        {editing ? (
+          <input
+            ref={inputRef}
+            value={draft}
+            onChange={(e) => setDraft(e.target.value)}
+            onBlur={commit}
+            onKeyDown={handleKeyDown}
+            onClick={(e) => e.stopPropagation()}
+            className="font-medium text-foreground bg-transparent border-b border-primary outline-none w-full max-w-[200px] py-0.5 text-sm"
+          />
+        ) : (
+          <span
+            className="font-medium text-foreground cursor-text group/name flex items-center gap-1"
+            onDoubleClick={startEdit}
+            title="Double-click to rename"
+          >
+            {project.name}
+            <PencilIcon className="size-3 opacity-0 group-hover/name:opacity-40 transition-opacity shrink-0" />
+          </span>
+        )}
+        {project.description && (
+          <span className="text-xs text-muted-foreground w-[200px] truncate">
+            {project.description}
+          </span>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ── Main table ──────────────────────────────────────────────────────────────
 
 export const ProjectsDataTable = ({
   defaultLimit,
@@ -57,6 +156,8 @@ export const ProjectsDataTable = ({
   };
   const router = useRouter();
   const setActiveProject = useSetAtom(activeProjectAtom);
+  const { mutateAsync: renameProject, isPending: isRenaming } =
+    useRenameProject();
 
   const [pagination, setPagination] = useState({
     pageIndex: 0,
@@ -71,6 +172,12 @@ export const ProjectsDataTable = ({
       desc: queryDefaults.orderDirection === "desc",
     },
   ]);
+
+  // Rename state
+  const [renameInfo, setRenameInfo] = useState<{
+    project: ProjectSelect;
+    pendingName: string;
+  } | null>(null);
 
   const sortField = sorting[0]?.id || queryDefaults.orderBy;
   const sortDesc = sorting[0]
@@ -123,6 +230,21 @@ export const ProjectsDataTable = ({
     queryClient,
   ]);
 
+  const handleRenameRequest = (project: ProjectSelect, newName: string) => {
+    setRenameInfo({ project, pendingName: newName });
+  };
+
+  const handleRenameConfirm = async (newName: string) => {
+    if (!renameInfo) return;
+    try {
+      await renameProject({ projectId: renameInfo.project.id, newName });
+      toast.success(`Project renamed to "${newName}"`);
+      setRenameInfo(null);
+    } catch (err: any) {
+      toast.error(err?.message ?? "Failed to rename project");
+    }
+  };
+
   const columns: any[] = useMemo(
     () => [
       {
@@ -149,34 +271,12 @@ export const ProjectsDataTable = ({
             </Button>
           );
         },
-        cell: ({ row }: { row: { original: ProjectSelect } }) => {
-          const isGithubProject = !!row.original.exportRepoUrl;
-          const isImporting = row.original.importStatus === "importing";
-
-          return (
-            <div className="flex flex-row items-center gap-3">
-              <div className="p-2 rounded-md bg-muted text-muted-foreground">
-                {isImporting ? (
-                  <Spinner className="size-4" />
-                ) : isGithubProject ? (
-                  <Github className="size-4" />
-                ) : (
-                  <GoRepo className="size-4" />
-                )}
-              </div>
-              <div className="flex flex-col">
-                <span className="font-medium text-foreground">
-                  {row.original.name}
-                </span>
-                {row.original.description && (
-                  <span className="text-xs text-muted-foreground w-[200px] truncate">
-                    {row.original.description}
-                  </span>
-                )}
-              </div>
-            </div>
-          );
-        },
+        cell: ({ row }: { row: { original: ProjectSelect } }) => (
+          <InlineRenameCell
+            project={row.original}
+            onRenameRequest={handleRenameRequest}
+          />
+        ),
       },
       {
         accessorKey: "createdAt",
@@ -260,14 +360,18 @@ export const ProjectsDataTable = ({
       },
       {
         id: "actions",
-        accessorKey: "id", // Adding this to satisfy the strict ColumnDef typing
+        accessorKey: "id",
         enableHiding: false,
         cell: ({ row }: { row: { original: ProjectSelect } }) => {
           const project = row.original;
           return (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="h-8 w-8 p-0">
+                <Button
+                  variant="ghost"
+                  className="h-8 w-8 p-0"
+                  onClick={(e) => e.stopPropagation()}
+                >
                   <span className="sr-only">Open menu</span>
                   <MoreHorizontalIcon className="h-4 w-4" />
                 </Button>
@@ -275,7 +379,8 @@ export const ProjectsDataTable = ({
               <DropdownMenuContent align="end">
                 <DropdownMenuLabel>Actions</DropdownMenuLabel>
                 <DropdownMenuItem
-                  onClick={() => {
+                  onClick={(e) => {
+                    e.stopPropagation();
                     navigator.clipboard.writeText(project.id);
                     toast.success("Project ID copied to clipboard");
                   }}
@@ -284,11 +389,23 @@ export const ProjectsDataTable = ({
                   Copy ID
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setRenameInfo({ project, pendingName: project.name });
+                  }}
+                >
+                  <PencilIcon className="mr-2 h-4 w-4" />
+                  Rename
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={(e) => e.stopPropagation()}>
                   <ExternalLinkIcon className="mr-2 h-4 w-4" />
                   Open Project
                 </DropdownMenuItem>
-                <DropdownMenuItem className="text-destructive focus:text-destructive">
+                <DropdownMenuItem
+                  className="text-destructive focus:text-destructive"
+                  onClick={(e) => e.stopPropagation()}
+                >
                   <TrashIcon className="mr-2 h-4 w-4" />
                   Delete Project
                 </DropdownMenuItem>
@@ -298,6 +415,7 @@ export const ProjectsDataTable = ({
         },
       },
     ],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   );
 
@@ -342,6 +460,16 @@ export const ProjectsDataTable = ({
           });
           router.push(`/projects/${username}/${row.name}`);
         }}
+      />
+
+      {/* Rename warning modal */}
+      <RenameProjectModal
+        open={!!renameInfo}
+        currentName={renameInfo?.project.name ?? ""}
+        pendingName={renameInfo?.pendingName ?? ""}
+        onConfirm={handleRenameConfirm}
+        onCancel={() => setRenameInfo(null)}
+        isPending={isRenaming}
       />
     </div>
   );

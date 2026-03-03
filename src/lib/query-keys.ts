@@ -76,4 +76,5 @@ export const queryKeys = {
   // Auth keys (since better-auth is used in the project)
   auth: createQueryKeyFactory("auth"),
   projects: createQueryKeyFactory("projects"),
+  files: createQueryKeyFactory("files"),
 };
