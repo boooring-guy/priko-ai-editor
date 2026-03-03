@@ -1,5 +1,6 @@
 import type { InferInsertModel, InferSelectModel } from "drizzle-orm";
 import { relations } from "drizzle-orm";
+import type { AnyPgColumn } from "drizzle-orm/pg-core";
 import {
   boolean,
   index,
@@ -178,3 +179,69 @@ export type ProjectSelect = Prettify<
     };
   }
 >;
+
+// Files
+// File Types
+export const fileTypes = ["file", "directory"] as const;
+export type FileType = (typeof fileTypes)[number];
+export const fileTypeEnum = pgEnum("file_type", fileTypes);
+export const fileContentTypes = ["text", "binary"] as const;
+export type FileContentType = (typeof fileContentTypes)[number];
+export const fileContentTypeEnum = pgEnum(
+  "file_content_type",
+  fileContentTypes,
+);
+export const files = pgTable(
+  "files",
+  {
+    id: text("id")
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+    name: text("name").notNull(),
+    projectId: text("project_id")
+      .notNull()
+      .references(() => projects.id, { onDelete: "cascade" }),
+    isDeleted: boolean("is_deleted").default(false).notNull(),
+    parentId: text("parent_id").references((): AnyPgColumn => files.id, {
+      onDelete: "cascade",
+    }),
+    contentType: fileContentTypeEnum("content_type").notNull(),
+    content: text("content"), // Text Files, Binary Files(image, video, audio, pdf, etc.) for bins it will be acted as Storage Id from S3
+    fileType: fileTypeEnum("file_type").notNull(),
+    // timestamps
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at")
+      .defaultNow()
+      .$onUpdate(() => /* @__PURE__ */ new Date())
+      .notNull(),
+  },
+  (table) => [
+    index("by_project_id").on(table.projectId),
+    index("by_parent_id").on(table.parentId),
+    index("by_parent_project_id").on(table.parentId, table.projectId),
+  ],
+);
+
+// Relation between File and other Tables
+export const fileRelations = relations(files, ({ one, many }) => ({
+  // A file has one project
+  project: one(projects, {
+    fields: [files.projectId],
+    references: [projects.id],
+  }),
+  // Self-referential: a file can have one parent and many children
+  parent: one(files, {
+    fields: [files.parentId],
+    references: [files.id],
+    relationName: "parent_children",
+  }),
+  children: many(files, {
+    relationName: "parent_children",
+  }),
+}));
+
+// schemas
+export const fileInsertSchema = createInsertSchema(files);
+export const fileSelectSchema = createSelectSchema(files);
+export type FileInsert = InferInsertModel<typeof files>;
+export type FileSelect = InferSelectModel<typeof files>;

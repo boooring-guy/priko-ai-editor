@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.7.0](https://github.com/boooring-guy/priko-ai-editor/compare/v0.6.1...v0.7.0) (2026-03-03)
+
+
+### Features
+
+* **explorer:** add file explorer, project renaming, and multi-pane editor ([77f2366](https://github.com/boooring-guy/priko-ai-editor/commit/77f23668f4ab2c17e7a9dade7c1ddfa55a71fb62))
+
 ### [0.6.1](https://github.com/boooring-guy/priko-ai-editor/compare/v0.6.0...v0.6.1) (2026-02-27)
 
 

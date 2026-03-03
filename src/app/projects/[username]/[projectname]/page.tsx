@@ -7,6 +7,7 @@ import { useUserGuard } from "@/modules/auth/api/use-user-guard";
 import { ProjectNotFound } from "@/modules/projects/components/project-not-found";
 import { ProjectsTableError } from "@/modules/projects/components/projects-table-error";
 import { useProjectGuard } from "@/modules/projects/hooks/use-project-guard";
+import { ProjectWorkspace } from "@/modules/projects/components/project-workspace";
 import { activeProjectAtom } from "@/modules/projects/store/project-atoms";
 
 type ProjectPageProps = {
@@ -57,12 +58,7 @@ function ProjectPageContent({ params }: ProjectPageProps) {
     return <ProjectNotFound />;
   }
 
-  return (
-    <div className="p-8">
-      <h1 className="text-2xl font-bold">{project?.name}</h1>
-      <p className="text-muted-foreground">by {project?.owner.username}</p>
-    </div>
-  );
+  return <ProjectWorkspace />;
 }
 
 // Skeleton for Suspense fallback while params are being resolved
