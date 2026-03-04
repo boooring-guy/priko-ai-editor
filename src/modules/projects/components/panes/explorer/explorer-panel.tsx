@@ -59,6 +59,8 @@ import {
   pendingCreateAtom,
   pendingRenameAtom,
   flatFilesAtom,
+  openFileTemporarilyAtom,
+  pinFileAtom,
 } from "@/modules/files/store/file-atoms";
 import { buildFileTree } from "@/modules/files/shared/file-type-guards";
 import type { FileNode } from "@/modules/files/shared/file-type-guards";
@@ -407,6 +409,8 @@ export function ExplorerPanel() {
   const [pendingCreate, setPendingCreate] = useAtom(pendingCreateAtom);
   const [pendingRename, setPendingRename] = useAtom(pendingRenameAtom);
   const setFlatFiles = useSetAtom(flatFilesAtom);
+  const openTemporarily = useSetAtom(openFileTemporarilyAtom);
+  const pinFile = useSetAtom(pinFileAtom);
 
   // ── Popover open state (per-button) ────────────────────────────────────────
   const [filePopoverOpen, setFilePopoverOpen] = React.useState(false);
@@ -855,7 +859,23 @@ export function ExplorerPanel() {
                 data={treeData}
                 className="text-xs"
                 initialSelectedItemId={selectedId}
-                onSelectChange={(item) => setSelectedId(item?.id)}
+                onSelectChange={(item) => {
+                  setSelectedId(item?.id);
+                  // Open file as temporary tab on single-click (skip directories)
+                  if (item) {
+                    const node = nodeMap.get(item.id);
+                    if (node && node.fileType !== "directory") {
+                      openTemporarily(item.id);
+                    }
+                  }
+                }}
+                onItemDoubleClick={(item) => {
+                  // Pin file as permanent tab on double-click (skip directories)
+                  const node = nodeMap.get(item.id);
+                  if (node && node.fileType !== "directory") {
+                    pinFile(item.id);
+                  }
+                }}
                 renderItem={renderItem}
               />
             )}
