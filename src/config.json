@@ -1,6 +1,9 @@
 {
   "app": {
     "editor": {
+      "fileBreadcrumb": {
+        "enabled": true
+      },
       "layout": {
         "leftPane": {
           "defaultSize": 20,
@@ -79,7 +82,17 @@
           "appearance": "dark"
         },
         { "value": "xcode", "label": "Xcode", "appearance": "light" },
-        { "value": "xcode-dark", "label": "Xcode Dark", "appearance": "dark" }
+        { "value": "xcode-dark", "label": "Xcode Dark", "appearance": "dark" },
+        {
+          "value": "cursor-light",
+          "label": "Cursor Light",
+          "appearance": "light"
+        },
+        {
+          "value": "cursor-dark",
+          "label": "Cursor Dark",
+          "appearance": "dark"
+        }
       ]
     },
     "projects": {

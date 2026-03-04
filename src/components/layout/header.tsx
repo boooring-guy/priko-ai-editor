@@ -5,6 +5,7 @@ import { ThemeSwitcher } from "@/components/theme-switcher";
 import { cn } from "@/lib/utils";
 import { UserButton } from "@/modules/auth/components/user-button";
 import { AdaptiveBreadcrumbs } from "./adaptive-breadcrumbs";
+import Logo from "../logo";
 
 interface HeaderProps {
   className?: string;
@@ -36,7 +37,7 @@ export function Header({
       <div className="flex h-16 items-center justify-between px-4 md:px-6 lg:px-8">
         <div className="flex items-center gap-4 flex-1">
           <div className="hidden sm:flex items-center gap-2 mr-2">
-            <h1 className="text-xl font-bold tracking-tight">Priko</h1>
+            <Logo size={"lg"} />
           </div>
           {startContent}
           {variant === "default" && (
