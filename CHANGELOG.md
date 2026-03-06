@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.8.0](https://github.com/boooring-guy/priko-ai-editor/compare/v0.7.0...v0.8.0) (2026-03-06)
+
+
+### Features
+
+* add global banner system and database health check ([23574e1](https://github.com/boooring-guy/priko-ai-editor/commit/23574e17861d2e816705d9f16a3e474688cd0d3f))
+* implement file breadcrumbs in header ([f2a6c59](https://github.com/boooring-guy/priko-ai-editor/commit/f2a6c59c4a240f18594b1620415d0c9fe505eb58))
+* implement tab management with preview/pinned states and global shortcuts ([0aad853](https://github.com/boooring-guy/priko-ai-editor/commit/0aad8532546a2285e03dc98402b5a434162ba622))
+* Introduce a new CodeMirror-based code editor with autosave, minimap, and indentation markers, alongside a welcome view and `mprocs` configuration. ([8fd282d](https://github.com/boooring-guy/priko-ai-editor/commit/8fd282d550e3c5ad2881dc06aaa99e53c90e7a6a))
+
 ## [0.7.0](https://github.com/boooring-guy/priko-ai-editor/compare/v0.6.1...v0.7.0) (2026-03-03)
 
 
