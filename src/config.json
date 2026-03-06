@@ -1,6 +1,27 @@
 {
   "app": {
     "editor": {
+      "formatOnSave": {
+        "enabled": true
+      },
+      "fileBreadcrumb": {
+        "enabled": true
+      },
+      "minimap": {
+        "enabled": true
+      },
+      "autosave": {
+        "enabled": true,
+        "intervalMs": 6000,
+        "onFocusLoss": false
+      },
+      "indentationMarkers": {
+        "enabled": true,
+        "highlightActiveBlock": true,
+        "hideFirstIndent": false,
+        "markerType": "fullScope",
+        "thickness": 1
+      },
       "layout": {
         "leftPane": {
           "defaultSize": 20,
@@ -79,7 +100,17 @@
           "appearance": "dark"
         },
         { "value": "xcode", "label": "Xcode", "appearance": "light" },
-        { "value": "xcode-dark", "label": "Xcode Dark", "appearance": "dark" }
+        { "value": "xcode-dark", "label": "Xcode Dark", "appearance": "dark" },
+        {
+          "value": "cursor-light",
+          "label": "Cursor Light",
+          "appearance": "light"
+        },
+        {
+          "value": "cursor-dark",
+          "label": "Cursor Dark",
+          "appearance": "dark"
+        }
       ]
     },
     "projects": {

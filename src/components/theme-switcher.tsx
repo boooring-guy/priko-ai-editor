@@ -56,6 +56,8 @@ const THEME_ICONS: Partial<
   "pineapple-dark": Moon,
   xcode: Monitor,
   "xcode-dark": Monitor,
+  "cursor-light": Sun,
+  "cursor-dark": Moon,
   "gsap-inspired": Zap,
 };
 

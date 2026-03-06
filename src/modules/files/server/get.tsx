@@ -90,3 +90,32 @@ export const getFolderContents = async (
 
   return buildFileTree(allFiles, folderId);
 };
+
+// ─── getFileById ──────────────────────────────────────────────────────────────
+
+/**
+ * Returns the full FileSelect row for a single file (including `content`).
+ *
+ * Used by the code editor to load a file's content without fetching the
+ * entire project file list.
+ *
+ * @param fileId     UUID of the file.
+ * @param projectId  UUID of the project (used for the ownership guard).
+ * @returns          The FileSelect row, or null if not found.
+ */
+export const getFileById = async (fileId: string, projectId: string) => {
+  const currentUser = await getCurrentUser();
+  if (!currentUser) throw new Error("Unauthorized");
+
+  await requireProjectAccess(projectId, currentUser.id);
+
+  const file = await db.query.files.findFirst({
+    where: and(
+      eq(files.id, fileId),
+      eq(files.projectId, projectId),
+      eq(files.isDeleted, false),
+    ),
+  });
+
+  return file ?? null;
+};

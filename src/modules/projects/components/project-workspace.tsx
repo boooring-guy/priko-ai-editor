@@ -13,6 +13,14 @@ import { CenterPane } from "./panes/center-pane";
 import { LeftPane } from "./panes/left-pane";
 import { RightPane } from "./panes/right-pane";
 
+const safeStorage =
+  typeof window !== "undefined"
+    ? localStorage
+    : {
+        getItem: () => null,
+        setItem: () => {},
+      };
+
 export function ProjectWorkspace() {
   const leftPaneRef = useRef<PanelImperativeHandle>(null);
   const rightPaneRef = useRef<PanelImperativeHandle>(null);
@@ -33,14 +41,14 @@ export function ProjectWorkspace() {
   const mainLayout = useDefaultLayout({
     id: "priko:main-layout",
     panelIds: ["left-pane", "center-pane", "right-pane"],
-    storage: localStorage,
+    storage: safeStorage,
   });
 
   // Persist & restore the inner vertical layout (editor | terminal)
   const centerSplitLayout = useDefaultLayout({
     id: "priko:center-split-layout",
     panelIds: ["editor-pane", "terminal-pane"],
-    storage: localStorage,
+    storage: safeStorage,
   });
 
   // Setup event listeners for the toggles dispatched from `global-shortcuts.tsx`
@@ -151,7 +159,7 @@ export function ProjectWorkspace() {
                 Terminal
               </div>
               <div className="p-4 text-sm text-muted-foreground">
-                Beautiful Terminal will go here.
+                This feature is not available yet.
               </div>
             </div>
           </ResizablePanel>

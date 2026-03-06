@@ -1,5 +1,11 @@
 import type { Metadata } from "next";
-import { Google_Sans, Inter, JetBrains_Mono, Manrope } from "next/font/google";
+import {
+  Google_Sans,
+  Inter,
+  JetBrains_Mono,
+  Manrope,
+  Montserrat,
+} from "next/font/google";
 import "@fontsource-variable/mona-sans";
 import { GlobalShortcuts } from "@/components/global-shortcuts";
 import { Toaster } from "@/components/ui/sonner";
@@ -29,6 +35,12 @@ const discordManrope = Manrope({
   fallback: ["sans-serif"],
 });
 
+const cursorMontserrat = Montserrat({
+  variable: "--font-cursor",
+  subsets: ["latin"],
+  fallback: ["sans-serif"],
+});
+
 export const metadata: Metadata = {
   title: "PriKo",
   description: "",
@@ -42,7 +54,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${googleSans.className} ${linearInter.variable} ${discordManrope.variable} ${JetBrainsMono.variable} antialiased`}
+        className={`${googleSans.className} ${linearInter.variable} ${discordManrope.variable} ${cursorMontserrat.variable} ${JetBrainsMono.variable} antialiased`}
         suppressHydrationWarning
       >
         <GlobalShortcuts />
@@ -51,7 +63,7 @@ export default function RootLayout({
           richColors
           closeButton
           swipeDirections={["right", "bottom"]}
-          position="top-right"
+          position="bottom-right"
         />
       </body>
     </html>

@@ -9,7 +9,15 @@ import {
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Provider as JotaiProvider } from "jotai";
 import { DEFAULT_THEME, THEME_NAMES } from "@/lib/themes";
+import { useDbHealthCheck } from "@/hooks/use-db-health-check";
+import { GlobalBanner } from "./banners/global-banner";
 import { ThemeProvider } from "./theme-provider";
+
+/** Mounts the DB health-check poll inside the Jotai context. */
+function DbHealthMount() {
+  useDbHealthCheck();
+  return null;
+}
 
 // Use the latest TanStack Query guidelines for Next.js App Router
 function makeQueryClient() {
@@ -53,6 +61,8 @@ export function Providers({ children }: { children: React.ReactNode }) {
         </ThemeProvider>
         <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
+      <DbHealthMount />
+      <GlobalBanner />
     </JotaiProvider>
   );
 }

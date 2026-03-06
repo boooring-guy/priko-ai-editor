@@ -1196,6 +1196,118 @@
     0px 20px 32px 0px rgb(0 0 0 / 0.64), 0px 12px 18px -6px rgb(0 0 0 / 0.64);
 }
 
+.cursor-light {
+  --background: #f6f7fb;
+  --foreground: #121826;
+  --card: #ffffff;
+  --card-foreground: #121826;
+  --popover: #ffffff;
+  --popover-foreground: #121826;
+  --primary: #4f46e5;
+  --primary-foreground: #ffffff;
+  --secondary: #e9edf7;
+  --secondary-foreground: #273449;
+  --muted: #eef1f8;
+  --muted-foreground: #6b7280;
+  --accent: #e7ecff;
+  --accent-foreground: #3730a3;
+  --destructive: #dc2626;
+  --border: #d8deeb;
+  --input: #d8deeb;
+  --ring: #4f46e5;
+  --chart-1: #4f46e5;
+  --chart-2: #2563eb;
+  --chart-3: #0ea5e9;
+  --chart-4: #f59e0b;
+  --chart-5: #ef4444;
+  --sidebar: #edf1f8;
+  --sidebar-foreground: #121826;
+  --sidebar-primary: #4f46e5;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #e4e9f5;
+  --sidebar-accent-foreground: #273449;
+  --sidebar-border: #d8deeb;
+  --sidebar-ring: #4f46e5;
+
+  --font-sans:
+    var(--font-cursor), "Montserrat", "Inter", "Segoe UI", ui-sans-serif,
+    system-ui, sans-serif;
+
+  --radius: 0.75rem;
+
+  --shadow-2xs: 0px 1px 2px 0px rgb(15 23 42 / 0.04);
+  --shadow-xs: 0px 1px 2px 0px rgb(15 23 42 / 0.06);
+  --shadow-sm:
+    0px 1px 2px 0px rgb(15 23 42 / 0.08), 0px 1px 2px -1px rgb(15 23 42 / 0.08);
+  --shadow:
+    0px 2px 4px 0px rgb(15 23 42 / 0.1), 0px 1px 2px -1px rgb(15 23 42 / 0.1);
+  --shadow-md:
+    0px 4px 8px 0px rgb(15 23 42 / 0.12), 0px 2px 4px -1px rgb(15 23 42 / 0.12);
+  --shadow-lg:
+    0px 8px 14px 0px rgb(15 23 42 / 0.14), 0px 4px 8px -2px rgb(15 23 42 / 0.14);
+  --shadow-xl:
+    0px 12px 20px 0px rgb(15 23 42 / 0.16),
+    0px 8px 12px -4px rgb(15 23 42 / 0.16);
+  --shadow-2xl:
+    0px 18px 28px 0px rgb(15 23 42 / 0.2),
+    0px 12px 18px -6px rgb(15 23 42 / 0.2);
+}
+
+.cursor-dark {
+  --background: #0f1117;
+  --foreground: #e8ecf7;
+  --card: #151924;
+  --card-foreground: #e8ecf7;
+  --popover: #151924;
+  --popover-foreground: #e8ecf7;
+  --primary: #7c8cff;
+  --primary-foreground: #0f1117;
+  --secondary: #1d2433;
+  --secondary-foreground: #d8deef;
+  --muted: #171d2b;
+  --muted-foreground: #94a3b8;
+  --accent: #232e47;
+  --accent-foreground: #dbe7ff;
+  --destructive: #f87171;
+  --border: #2d3851;
+  --input: #2d3851;
+  --ring: #7c8cff;
+  --chart-1: #7c8cff;
+  --chart-2: #60a5fa;
+  --chart-3: #22d3ee;
+  --chart-4: #f59e0b;
+  --chart-5: #f87171;
+  --sidebar: #0b0e14;
+  --sidebar-foreground: #e8ecf7;
+  --sidebar-primary: #7c8cff;
+  --sidebar-primary-foreground: #0f1117;
+  --sidebar-accent: #1b2231;
+  --sidebar-accent-foreground: #d8deef;
+  --sidebar-border: #2d3851;
+  --sidebar-ring: #7c8cff;
+
+  --font-sans:
+    var(--font-cursor), "Montserrat", "Inter", "Segoe UI", ui-sans-serif,
+    system-ui, sans-serif;
+
+  --radius: 0.75rem;
+
+  --shadow-2xs: 0px 1px 2px 0px rgb(0 0 0 / 0.26);
+  --shadow-xs: 0px 1px 2px 0px rgb(0 0 0 / 0.3);
+  --shadow-sm:
+    0px 1px 2px 0px rgb(0 0 0 / 0.34), 0px 1px 2px -1px rgb(0 0 0 / 0.34);
+  --shadow:
+    0px 2px 4px 0px rgb(0 0 0 / 0.38), 0px 1px 2px -1px rgb(0 0 0 / 0.38);
+  --shadow-md:
+    0px 4px 8px 0px rgb(0 0 0 / 0.42), 0px 2px 4px -1px rgb(0 0 0 / 0.42);
+  --shadow-lg:
+    0px 8px 14px 0px rgb(0 0 0 / 0.48), 0px 4px 8px -2px rgb(0 0 0 / 0.48);
+  --shadow-xl:
+    0px 12px 20px 0px rgb(0 0 0 / 0.54), 0px 8px 12px -4px rgb(0 0 0 / 0.54);
+  --shadow-2xl:
+    0px 18px 28px 0px rgb(0 0 0 / 0.62), 0px 12px 18px -6px rgb(0 0 0 / 0.62);
+}
+
 .duolingo {
   --background: #f7f7f7;
   --foreground: #3c3c3c;
@@ -1383,7 +1495,7 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground !select-none;
     font-size: var(--font-size-md);
     line-height: var(--line-height-normal);
     font-weight: var(--font-weight-normal);
@@ -1579,6 +1691,14 @@
     sans-serif;
 }
 
+.cursor-light body,
+.cursor-dark body {
+  font-family:
+    var(--font-cursor), "Montserrat", "Inter", "Segoe UI", ui-sans-serif,
+    system-ui, sans-serif;
+  letter-spacing: -0.005em;
+}
+
 .github-dark body {
   font-family:
     "Mona Sans Variable",
@@ -1592,4 +1712,31 @@
     sans-serif,
     "Apple Color Emoji",
     "Segoe UI Emoji";
+}
+
+/* ─── Wave animation for welcome hand emoji ─── */
+@keyframes wave {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  10% {
+    transform: rotate(14deg);
+  }
+  20% {
+    transform: rotate(-8deg);
+  }
+  30% {
+    transform: rotate(14deg);
+  }
+  40% {
+    transform: rotate(-4deg);
+  }
+  50% {
+    transform: rotate(10deg);
+  }
+  60%,
+  100% {
+    transform: rotate(0deg);
+  }
 }
