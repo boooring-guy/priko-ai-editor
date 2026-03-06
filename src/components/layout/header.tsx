@@ -28,36 +28,56 @@ export function Header({
   endContent,
 }: HeaderProps) {
   return (
-    <header
-      className={cn(
-        "sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60",
-        className,
-      )}
-    >
-      <div className="flex h-16 items-center justify-between px-4 md:px-6 lg:px-8">
-        <div className="flex items-center gap-4 flex-1">
-          <div className="hidden sm:flex items-center gap-2 mr-2">
-            <Logo size={"lg"} />
+    <header className={cn("sticky top-0 z-40 w-full", className)}>
+      {/* Main header bar */}
+      <div className="relative bg-background/80 backdrop-blur-xl supports-backdrop-filter:bg-background/60">
+        <div className="flex h-14 items-center justify-between px-4 md:px-6 lg:px-8">
+          {/* ── Left section ── */}
+          <div className="flex items-center gap-3 flex-1 min-w-0">
+            {/* Logo with subtle hover animation */}
+            <div className="flex items-center gap-2.5 shrink-0 group cursor-default select-none">
+              <div className="relative flex items-center justify-center">
+                {/* Glow ring behind logo on hover */}
+                <div className="absolute inset-0 rounded-lg bg-primary/0 group-hover:bg-primary/10 blur-md transition-all duration-500" />
+                <Logo
+                  size="lg"
+                  className="relative transition-transform duration-300 group-hover:scale-110"
+                />
+              </div>
+              <span className="hidden sm:inline-block text-sm font-semibold tracking-tight text-foreground/90">
+                Priko
+              </span>
+            </div>
+
+            {/* Separator */}
+            <div className="hidden sm:block h-5 w-px bg-border/60" />
+
+            {startContent}
+
+            {variant === "default" && (
+              <AdaptiveBreadcrumbs items={breadcrumbItems} />
+            )}
           </div>
-          {startContent}
-          {variant === "default" && (
-            <AdaptiveBreadcrumbs items={breadcrumbItems} />
+
+          {/* ── Center section ── */}
+          {centerContent && (
+            <div className="flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 justify-center">
+              {centerContent}
+            </div>
           )}
-        </div>
 
-        {centerContent && (
-          <div className="flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 justify-center">
-            {centerContent}
-          </div>
-        )}
-
-        <div className="flex items-center justify-end gap-3 flex-1">
-          {endContent}
-          <div className="flex items-center gap-2">
-            <ThemeSwitcher />
-            <UserButton />
+          {/* ── Right section ── */}
+          <div className="flex items-center justify-end gap-2 flex-1">
+            {endContent}
+            <div className="flex items-center gap-1.5">
+              <ThemeSwitcher />
+              <UserButton />
+            </div>
           </div>
         </div>
+
+        {/* Bottom border with subtle gradient */}
+        <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
       </div>
     </header>
   );

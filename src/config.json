@@ -1,8 +1,26 @@
 {
   "app": {
     "editor": {
+      "formatOnSave": {
+        "enabled": true
+      },
       "fileBreadcrumb": {
         "enabled": true
+      },
+      "minimap": {
+        "enabled": true
+      },
+      "autosave": {
+        "enabled": true,
+        "intervalMs": 6000,
+        "onFocusLoss": false
+      },
+      "indentationMarkers": {
+        "enabled": true,
+        "highlightActiveBlock": true,
+        "hideFirstIndent": false,
+        "markerType": "fullScope",
+        "thickness": 1
       },
       "layout": {
         "leftPane": {

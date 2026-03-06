@@ -2,6 +2,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { queryKeys } from "@/lib/query-keys";
 import { queryClient } from "@/components/providers";
 import { getFiles } from "./server/get";
+import { getFileById } from "./server/get";
 import { createFile, createFolder } from "./server/create";
 import { deleteFile, deleteFolder } from "./server/delete";
 import { renameFile, renameFolder } from "./server/rename";
@@ -33,6 +34,18 @@ export function useGetFiles(projectId: string | undefined) {
     queryKey: queryKeys.files.list({ projectId }),
     queryFn: () => getFiles(projectId!),
     enabled: !!projectId,
+  });
+}
+
+export function useGetFileContent(
+  fileId: string | null | undefined,
+  projectId: string | null | undefined,
+) {
+  return useQuery({
+    queryKey: queryKeys.files.detail(fileId ?? ""),
+    queryFn: () => getFileById(fileId!, projectId!),
+    enabled: !!fileId && !!projectId,
+    staleTime: 30_000, // 30 s — avoids re-fetching on every re-render
   });
 }
 

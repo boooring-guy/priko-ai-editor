@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
-import { useAtom } from "jotai";
+import React, { useRef, useState } from "react";
+import { useAtom, useAtomValue } from "jotai";
 import { useRouter } from "next/navigation";
 import { PencilIcon, Play, MoreVertical, Check, X } from "lucide-react";
 import { toast } from "sonner";
@@ -12,13 +12,14 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ProjectStatusBadge, type SaveStatus } from "./project-status-badge";
+import { ProjectStatusBadge } from "./project-status-badge";
 import { RenameProjectModal } from "./rename-project-modal";
 import { useRenameProject } from "../hooks";
 import { activeProjectAtom } from "../store/project-atoms";
+import { autosaveSyncStatusAtom } from "@/modules/editor/store/autosave-atoms";
 
 export function ProjectHeaderExtension() {
-  const [status, setStatus] = useState<SaveStatus>("saved");
+  const syncStatus = useAtomValue(autosaveSyncStatusAtom);
   const [activeProject, setActiveProject] = useAtom(activeProjectAtom);
   const router = useRouter();
   const { mutateAsync: renameProject, isPending: isRenaming } =
@@ -32,23 +33,6 @@ export function ProjectHeaderExtension() {
   // Rename-modal state
   const [renameModalOpen, setRenameModalOpen] = useState(false);
   const [pendingName, setPendingName] = useState("");
-
-  useEffect(() => {
-    const handleSaveStart = () => setStatus("saving");
-    const handleSaveEnd = () => setStatus("saved");
-    const handleSaveError = () => setStatus("error");
-
-    window.addEventListener("save-start", handleSaveStart);
-    window.addEventListener("save-end", handleSaveEnd);
-    window.addEventListener("save-error", handleSaveError);
-
-    return () => {
-      window.removeEventListener("save-start", handleSaveStart);
-      window.removeEventListener("save-end", handleSaveEnd);
-      window.removeEventListener("save-error", handleSaveError);
-    };
-  }, []);
-
   const startEditing = () => {
     if (!activeProject) return;
     setDraft(activeProject.name);
@@ -114,7 +98,7 @@ export function ProjectHeaderExtension() {
 
   return (
     <div className="flex items-center gap-1 sm:gap-3">
-      <ProjectStatusBadge status={status} />
+      <ProjectStatusBadge status={syncStatus} />
 
       {/* Editable project name — desktop */}
       {activeProject && (

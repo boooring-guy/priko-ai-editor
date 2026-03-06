@@ -11,10 +11,8 @@ const LOGO_SIZES = {
 
 type LogoSize = keyof typeof LOGO_SIZES;
 
-export interface LogoProps extends Omit<
-  React.SVGProps<SVGSVGElement>,
-  "color"
-> {
+export interface LogoProps
+  extends Omit<React.SVGProps<SVGSVGElement>, "color"> {
   size?: LogoSize | number;
   strokeColor?: string;
   strokeWidth?: number;

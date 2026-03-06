@@ -555,13 +555,17 @@ export function ExplorerPanel() {
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <button
-              type="button"
-              onClick={(e) => e.stopPropagation()}
-              className="p-0.5 rounded hover:bg-muted/80 text-muted-foreground hover:text-foreground transition-colors"
+            <div
+              role="button"
+              tabIndex={0}
+              onClick={(e) => {
+                e.stopPropagation();
+                e.preventDefault();
+              }}
+              className="p-0.5 rounded hover:bg-muted/80 text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
             >
               <MoreHorizontal className="h-3.5 w-3.5" />
-            </button>
+            </div>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="text-xs w-40">
             {isDir && (

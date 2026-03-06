@@ -17,12 +17,14 @@ import {
   openFileTemporarilyAtom,
 } from "@/modules/files/store/file-atoms";
 import { activeProjectAtom } from "@/modules/projects/store/project-atoms";
+import { isFileDirtyAtom } from "@/modules/editor/store/editor-atoms";
 import { ExplorerContextMenu } from "./explorer/explorer-context-menu";
 import type { FileNode } from "@/modules/files/shared/file-type-guards";
 
 import { CodeView } from "./code-view";
 import { PreviewView } from "./preview-view";
 import { FileBreadcrumb } from "./file-breadcrumb";
+import { WelcomeView } from "./welcome-view";
 import { useGlobalTabShortcuts } from "@/hooks/use-global-tab-shortcuts";
 import {
   TooltipProvider,
@@ -50,6 +52,7 @@ export function CenterPane() {
   const pinFile = useSetAtom(pinFileAtom);
   const openTemporarily = useSetAtom(openFileTemporarilyAtom);
   const activeProject = useAtomValue(activeProjectAtom);
+  const isFileDirty = useAtomValue(isFileDirtyAtom);
 
   // ── Global Keyboard Shortcuts ──────────────────────────────────────────────
   useGlobalTabShortcuts();
@@ -155,6 +158,11 @@ export function CenterPane() {
                       {file.name}
                     </span>
 
+                    {/* Unsaved indicator */}
+                    {isFileDirty(tab.fileId) && (
+                      <div className="h-2 w-2 rounded-full bg-primary shrink-0" />
+                    )}
+
                     {/* Close button */}
                     <button
                       type="button"
@@ -252,13 +260,17 @@ export function CenterPane() {
 
       {/* ── Content ─────────────────────────────────────────────── */}
       <div className="flex-1 relative bg-muted/10">
-        <div
-          ref={contentWrapperRef}
-          className="absolute inset-0 overflow-y-auto"
-        >
-          {activeMode === "code" && <CodeView />}
-          {activeMode === "preview" && <PreviewView />}
-        </div>
+        {!activeTabId ? (
+          <WelcomeView />
+        ) : (
+          <div
+            ref={contentWrapperRef}
+            className="absolute inset-0 overflow-y-auto"
+          >
+            {activeMode === "code" && <CodeView />}
+            {activeMode === "preview" && <PreviewView />}
+          </div>
+        )}
       </div>
     </div>
   );

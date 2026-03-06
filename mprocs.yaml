@@ -1,0 +1,5 @@
+procs:
+  inngest:
+    shell: "npx --ignore-scripts=false inngest-cli@latest dev"
+  dev:
+    shell: "bun run dev"

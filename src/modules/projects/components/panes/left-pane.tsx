@@ -10,7 +10,7 @@ export function LeftPane() {
       </div>
       <div className="flex-1 p-4 overflow-y-auto">
         <p className="text-sm text-muted-foreground">
-          Beautiful Conversation with AI will go here.
+          This feature is not available yet.
         </p>
       </div>
     </div>

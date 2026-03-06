@@ -8,6 +8,7 @@ import {
   type UpdateFileInput,
   updateFileSchema,
 } from "../shared/mutations.schema";
+import { formatContentOnSave } from "./format";
 
 // ─── Shared helpers ───────────────────────────────────────────────────────────
 
@@ -52,13 +53,26 @@ export const updateFile = async (rawInput: UpdateFileInput) => {
       eq(files.fileType, "file"), // Reject directories
       eq(files.isDeleted, false),
     ),
-    columns: { id: true },
+    columns: {
+      id: true,
+      name: true,
+      contentType: true,
+    },
   });
   if (!target)
     throw new Error("File not found, already deleted, or is a directory.");
 
   const patch: Partial<typeof files.$inferInsert> = {};
-  if (input.content !== undefined) patch.content = input.content;
+
+  const nextContentType = input.contentType ?? target.contentType;
+  if (input.content !== undefined) {
+    if (nextContentType === "text") {
+      patch.content = await formatContentOnSave(target.name, input.content);
+    } else {
+      patch.content = input.content;
+    }
+  }
+
   if (input.contentType !== undefined) patch.contentType = input.contentType;
 
   const [updated] = await db

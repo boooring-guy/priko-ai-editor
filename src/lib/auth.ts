@@ -15,10 +15,22 @@ export const auth = betterAuth({
     "http://localhost:3000",
     "https://tunnel.pro-track.app",
     "*.pro-track.app",
+    "next.pro-track.app",
   ],
   advanced: {
     crossSubDomainCookies: {
       enabled: true,
+      domain: (() => {
+        const url = process.env.BETTER_AUTH_URL || "http://localhost:3000";
+        const hostname = new URL(url).hostname;
+        // For localhost, don't set a domain (let the browser handle it)
+        if (hostname === "localhost" || hostname === "127.0.0.1") {
+          return undefined;
+        }
+        // For deployed domains, use the root domain (e.g., ".pro-track.app")
+        const parts = hostname.split(".");
+        return `.${parts.slice(-2).join(".")}`;
+      })(),
     },
   },
   plugins: [
