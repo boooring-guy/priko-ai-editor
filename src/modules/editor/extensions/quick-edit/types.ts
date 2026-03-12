@@ -1,4 +1,4 @@
-export type QuickEditPhase = "idle" | "prompting" | "loading" | "preview";
+export type QuickEditPhase = "idle" | "tooltip" | "prompting" | "loading" | "preview";
 
 export interface QuickEditState {
   phase: QuickEditPhase;

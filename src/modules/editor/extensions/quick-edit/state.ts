@@ -3,6 +3,12 @@ import { type QuickEditState, initialQuickEditState } from "./types";
 
 // ── State Effects (Actions) ─────────────────────────────────────────────
 
+export const openQuickEditTooltipEffect = StateEffect.define<{
+  from: number;
+  to: number;
+  selectionText: string;
+}>();
+
 export const openQuickEditEffect = StateEffect.define<{
   from: number;
   to: number;
@@ -43,7 +49,16 @@ export const quickEditField = StateField.define<QuickEditState>({
 
     // 2. Reduce effects
     for (const effect of tr.effects) {
-      if (effect.is(openQuickEditEffect)) {
+      if (effect.is(openQuickEditTooltipEffect)) {
+        nextState = {
+          ...initialQuickEditState,
+          phase: "tooltip",
+          from: effect.value.from,
+          to: effect.value.to,
+          selectionText: effect.value.selectionText,
+          autoOpen: true,
+        };
+      } else if (effect.is(openQuickEditEffect)) {
         nextState = {
           ...initialQuickEditState,
           phase: "prompting",

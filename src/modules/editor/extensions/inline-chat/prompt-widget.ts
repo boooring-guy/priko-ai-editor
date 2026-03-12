@@ -154,6 +154,12 @@ async function submitPrompt(view: EditorView, prompt: string) {
       }),
     });
 
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error("Inline chat API error:", response.status, errorText);
+      throw new Error(`API returned ${response.status}`);
+    }
+
     if (!response.body) {
       throw new Error("API response has no body");
     }
