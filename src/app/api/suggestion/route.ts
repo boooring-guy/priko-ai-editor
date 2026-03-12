@@ -109,7 +109,7 @@ export async function POST(request: Request) {
       contextFiles = [],
     } = await request.json();
 
-    if (!code) {
+    if (typeof code !== "string") {
       return NextResponse.json({ error: "Code is required" }, { status: 400 });
     }
 

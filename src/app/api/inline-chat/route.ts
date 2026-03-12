@@ -76,7 +76,7 @@ export async function POST(request: Request) {
     const { prompt, fileName, code, selection, cursorLine, contextFiles } =
       await request.json();
 
-    if (!prompt || !code) {
+    if (typeof prompt !== "string" || typeof code !== "string") {
       return NextResponse.json(
         { error: "prompt and code are required" },
         { status: 400 },

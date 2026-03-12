@@ -23,6 +23,7 @@ import {
 } from "@codemirror/commands";
 import { suggestion } from "../extensions/suggestions";
 import { inlineChat } from "../extensions/inline-chat";
+import { quickEdit } from "../extensions/quick-edit";
 import { cpp } from "@codemirror/lang-cpp";
 import { css } from "@codemirror/lang-css";
 import { go } from "@codemirror/lang-go";
@@ -271,6 +272,7 @@ export function useCodeEditor({
       // Custom extensions
       suggestion({ fileName, getContextFiles }),
       inlineChat({ fileName, getContextFiles }),
+      quickEdit(),
     ];
 
     const state = EditorState.create({
