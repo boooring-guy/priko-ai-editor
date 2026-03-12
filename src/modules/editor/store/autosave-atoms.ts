@@ -1,6 +1,5 @@
 import { atom } from "jotai";
-import { atomWithStorage } from "jotai/utils";
-import config from "@/config.json";
+import { userConfigAtom } from "@/modules/config/store/config-atoms";
 import { editorDirtyAtom } from "./editor-atoms";
 
 /**
@@ -29,27 +28,24 @@ export const autosaveSyncStatusAtom = atom<SyncStatus>((get) => {
 
 /**
  * Whether autosave is enabled.
- * Persisted per-user in localStorage; defaults from config.json.
+ * Derived from the central userConfigAtom (synced to DB).
  */
-export const autosaveEnabledAtom = atomWithStorage<boolean>(
-  "priko:autosave-enabled",
-  config.app.editor.autosave.enabled,
+export const autosaveEnabledAtom = atom<boolean>(
+  (get) => get(userConfigAtom).app.editor.autosave.enabled,
 );
 
 /**
  * Autosave interval in milliseconds.
- * Persisted per-user in localStorage; defaults from config.json.
+ * Derived from the central userConfigAtom (synced to DB).
  */
-export const autosaveIntervalAtom = atomWithStorage<number>(
-  "priko:autosave-interval",
-  config.app.editor.autosave.intervalMs,
+export const autosaveIntervalAtom = atom<number>(
+  (get) => get(userConfigAtom).app.editor.autosave.intervalMs,
 );
 
 /**
  * Whether to autosave when the window loses focus.
- * Persisted per-user in localStorage; defaults from config.json.
+ * Derived from the central userConfigAtom (synced to DB).
  */
-export const autosaveOnFocusLossAtom = atomWithStorage<boolean>(
-  "priko:autosave-on-focus-loss",
-  config.app.editor.autosave.onFocusLoss,
+export const autosaveOnFocusLossAtom = atom<boolean>(
+  (get) => get(userConfigAtom).app.editor.autosave.onFocusLoss,
 );

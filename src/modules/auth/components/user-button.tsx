@@ -1,8 +1,9 @@
 "use client";
 
-import { Loader2, LogOut, Settings, Sparkles, User } from "lucide-react";
+import { Loader2, LogOut, Settings, User } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
+import { useAtomValue } from "jotai";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,6 +13,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { SettingsSheet } from "@/modules/config/components/settings-sheet";
+import { userConfigAtom } from "@/modules/config/store/config-atoms";
 import { useCurrentUser } from "../api/use-current-user";
 import { useLogout } from "../api/use-logout";
 
@@ -19,6 +22,8 @@ export const UserButton = () => {
   const { data: session, isPending } = useCurrentUser();
   const { mutate: logout, isPending: isLoggingOut } = useLogout();
   const [imageError, setImageError] = useState(false);
+  const [settingsOpen, setSettingsOpen] = useState(false);
+  const currentConfig = useAtomValue(userConfigAtom);
 
   if (isPending) {
     return <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />;
@@ -34,62 +39,69 @@ export const UserButton = () => {
   const userEmail = session.user.email ?? "";
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <button className="relative h-9 w-9 rounded-full overflow-hidden bg-muted flex items-center justify-center border border-border hover:ring-2 hover:ring-offset-2 hover:ring-ring transition-all outline-none">
-          {showImage ? (
-            <Image
-              src={userImage}
-              alt={username}
-              fill
-              className="object-cover"
-              onError={() => setImageError(true)}
-            />
-          ) : (
-            <User className="h-5 w-5 text-muted-foreground" />
-          )}
-        </button>
-      </DropdownMenuTrigger>
+    <>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <button className="relative h-9 w-9 rounded-full overflow-hidden bg-muted flex items-center justify-center border border-border hover:ring-2 hover:ring-offset-2 hover:ring-ring transition-all outline-none">
+            {showImage ? (
+              <Image
+                src={userImage}
+                alt={username}
+                fill
+                className="object-cover"
+                onError={() => setImageError(true)}
+              />
+            ) : (
+              <User className="h-5 w-5 text-muted-foreground" />
+            )}
+          </button>
+        </DropdownMenuTrigger>
 
-      <DropdownMenuContent className="w-56" align="end" forceMount>
-        <DropdownMenuLabel className="font-normal">
-          <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium leading-none">{username}</p>
-            <p className="text-xs leading-none text-muted-foreground">
-              {userEmail}
-            </p>
-          </div>
-        </DropdownMenuLabel>
+        <DropdownMenuContent className="w-56" align="end" forceMount>
+          <DropdownMenuLabel className="font-normal">
+            <div className="flex flex-col space-y-1">
+              <p className="text-sm font-medium leading-none">{username}</p>
+              <p className="text-xs leading-none text-muted-foreground">
+                {userEmail}
+              </p>
+            </div>
+          </DropdownMenuLabel>
 
-        <DropdownMenuSeparator />
+          <DropdownMenuSeparator />
 
-        <DropdownMenuGroup>
-          <DropdownMenuItem className="cursor-pointer">
-            <Settings className="mr-2 h-4 w-4" />
-            <span>Settings</span>
+          <DropdownMenuGroup>
+            <DropdownMenuItem
+              className="cursor-pointer"
+              onClick={() => setSettingsOpen(true)}
+            >
+              <Settings className="mr-2 h-4 w-4" />
+              <span>Settings</span>
+            </DropdownMenuItem>
+          </DropdownMenuGroup>
+
+          <DropdownMenuSeparator />
+
+          <DropdownMenuItem
+            className="cursor-pointer text-destructive focus:bg-destructive/10 focus:text-destructive"
+            onClick={() => logout()}
+            disabled={isLoggingOut}
+            variant="destructive"
+          >
+            {isLoggingOut ? (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            ) : (
+              <LogOut className="mr-2 h-4 w-4" />
+            )}
+            <span>Log out</span>
           </DropdownMenuItem>
-          <DropdownMenuItem className="cursor-pointer">
-            <Sparkles className="mr-2 h-4 w-4" />
-            <span>Preferences</span>
-          </DropdownMenuItem>
-        </DropdownMenuGroup>
+        </DropdownMenuContent>
+      </DropdownMenu>
 
-        <DropdownMenuSeparator />
-
-        <DropdownMenuItem
-          className="cursor-pointer text-destructive focus:bg-destructive/10 focus:text-destructive"
-          onClick={() => logout()}
-          disabled={isLoggingOut}
-          variant="destructive"
-        >
-          {isLoggingOut ? (
-            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-          ) : (
-            <LogOut className="mr-2 h-4 w-4" />
-          )}
-          <span>Log out</span>
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+      <SettingsSheet
+        open={settingsOpen}
+        onOpenChange={setSettingsOpen}
+        currentConfig={currentConfig}
+      />
+    </>
   );
 };

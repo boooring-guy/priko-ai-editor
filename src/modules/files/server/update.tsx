@@ -66,7 +66,7 @@ export const updateFile = async (rawInput: UpdateFileInput) => {
 
   const nextContentType = input.contentType ?? target.contentType;
   if (input.content !== undefined) {
-    if (nextContentType === "text") {
+    if (nextContentType === "text" && input.content !== null) {
       patch.content = await formatContentOnSave(target.name, input.content);
     } else {
       patch.content = input.content;

@@ -21,6 +21,9 @@ import {
   selectLineBoundaryForward,
   toggleComment,
 } from "@codemirror/commands";
+import { suggestion } from "../extensions/suggestions";
+import { inlineChat } from "../extensions/inline-chat";
+import { quickEdit } from "../extensions/quick-edit";
 import { cpp } from "@codemirror/lang-cpp";
 import { css } from "@codemirror/lang-css";
 import { go } from "@codemirror/lang-go";
@@ -65,9 +68,9 @@ import {
   rectangularSelection,
   scrollPastEnd,
 } from "@codemirror/view";
-import { useSetAtom } from "jotai";
+import { useSetAtom, useAtomValue } from "jotai";
 import { useCallback, useEffect, useRef, useState } from "react";
-import config from "@/config.json";
+import { userConfigAtom } from "@/modules/config/store/config-atoms";
 import { appCodeMirrorTheme } from "../lib/codemirror-theme";
 import { minimapExtension } from "../lib/codemirror-minimap";
 import { indentationMarkersExtension } from "../lib/codemirror-indentation-markers";
@@ -157,6 +160,7 @@ interface UseCodeEditorProps {
   draftContent: string | null;
   onSave?: (content: string) => void;
   fileName: string; // Used to determine language
+  getContextFiles?: () => Promise<import("../extensions/suggestions").ContextFile[]>;
 }
 
 export function useCodeEditor({
@@ -165,10 +169,12 @@ export function useCodeEditor({
   draftContent,
   onSave,
   fileName,
+  getContextFiles,
 }: UseCodeEditorProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const viewRef = useRef<EditorView | null>(null);
   const setDraft = useSetAtom(setFileDraftAtom);
+  const config = useAtomValue(userConfigAtom);
   const [content, setContent] = useState(draftContent ?? initialContent);
 
   // Simple save shortcut
@@ -208,9 +214,11 @@ export function useCodeEditor({
       autocompletion(),
       highlightSelectionMatches(),
       scrollPastEnd(),
+      EditorView.lineWrapping,
+
       placeholder("Start typing…"),
       ...(config.app.editor.minimap.enabled ? [minimapExtension] : []),
-      ...indentationMarkersExtension(),
+      ...indentationMarkersExtension(config.app.editor.indentationMarkers),
       ...appCodeMirrorTheme,
       ...getLanguageExtension(fileName),
       keymap.of([
@@ -260,6 +268,11 @@ export function useCodeEditor({
           }
         }
       }),
+
+      // Custom extensions
+      suggestion({ fileName, getContextFiles }),
+      inlineChat({ fileName, getContextFiles }),
+      quickEdit(),
     ];
 
     const state = EditorState.create({
