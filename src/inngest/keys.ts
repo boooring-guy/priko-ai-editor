@@ -11,4 +11,7 @@ export const INNGEST = {
     HELLO_WORLD: createInngestKey("test", "hello.world"),
     DEMO_GENERATE: createInngestKey("test", "demo.generate"),
   },
+  NEW_USER: {
+    CREATE_CONFIG: createInngestKey("new-user", "create-config"),
+  },
 } as const;

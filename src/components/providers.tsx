@@ -10,12 +10,19 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Provider as JotaiProvider } from "jotai";
 import { DEFAULT_THEME, THEME_NAMES } from "@/lib/themes";
 import { useDbHealthCheck } from "@/hooks/use-db-health-check";
+import { useSyncConfig } from "@/modules/config/hooks/use-sync-config";
 import { GlobalBanner } from "./banners/global-banner";
 import { ThemeProvider } from "./theme-provider";
 
 /** Mounts the DB health-check poll inside the Jotai context. */
 function DbHealthMount() {
   useDbHealthCheck();
+  return null;
+}
+
+/** Hydrates the Jotai userConfigAtom from the DB on mount. */
+function ConfigSyncMount() {
+  useSyncConfig();
   return null;
 }
 
@@ -62,6 +69,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
         <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
       <DbHealthMount />
+      <ConfigSyncMount />
       <GlobalBanner />
     </JotaiProvider>
   );

@@ -1,10 +1,17 @@
 import { indentationMarkers } from "@replit/codemirror-indentation-markers";
 import type { Extension } from "@codemirror/state";
-import config from "@/config.json";
 
-const opts = config.app.editor.indentationMarkers;
+interface IndentationConfig {
+  enabled: boolean;
+  highlightActiveBlock: boolean;
+  hideFirstIndent: boolean;
+  markerType: string;
+  thickness: number;
+}
 
-export function indentationMarkersExtension(): Extension[] {
+export function indentationMarkersExtension(
+  opts: IndentationConfig,
+): Extension[] {
   if (!opts.enabled) return [];
 
   return [

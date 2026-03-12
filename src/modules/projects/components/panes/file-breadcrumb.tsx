@@ -9,7 +9,7 @@ import {
   flatFilesAtom,
 } from "@/modules/files/store/file-atoms";
 import { makeFileIcon, makeFolderIcon } from "@/lib/file-icon";
-import config from "@/config.json";
+import { userConfigAtom } from "@/modules/config/store/config-atoms";
 
 interface FileBreadcrumbProps {
   className?: string;
@@ -37,6 +37,8 @@ export function FileBreadcrumb({ className }: FileBreadcrumbProps) {
     }
     return chain;
   }, [activeTabId, fileMap]);
+
+  const config = useAtomValue(userConfigAtom);
 
   // Respect the feature flag — after all hooks so React rules are satisfied
   if (!config.app.editor.fileBreadcrumb.enabled) return null;

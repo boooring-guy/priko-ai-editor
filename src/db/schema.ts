@@ -4,6 +4,7 @@ import type { AnyPgColumn } from "drizzle-orm/pg-core";
 import {
   boolean,
   index,
+  jsonb,
   pgEnum,
   pgTable,
   text,
@@ -90,10 +91,11 @@ export const verification = pgTable(
   (table) => [index("verification_identifier_idx").on(table.identifier)],
 );
 
-export const userRelations = relations(user, ({ many }) => ({
+export const userRelations = relations(user, ({ many, one }) => ({
   sessions: many(session),
   accounts: many(account),
   projects: many(projects),
+  config: one(userConfig),
 }));
 
 export const sessionRelations = relations(session, ({ one }) => ({
@@ -109,6 +111,39 @@ export const accountRelations = relations(account, ({ one }) => ({
     references: [user.id],
   }),
 }));
+
+// ─── User Config ───────────────────────────────────────────────
+export const userConfig = pgTable(
+  "user_config",
+  {
+    id: text("id")
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+    userId: text("user_id")
+      .notNull()
+      .unique()
+      .references(() => user.id, { onDelete: "cascade" }),
+    config: jsonb("config").default({}).notNull(),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at")
+      .defaultNow()
+      .$onUpdate(() => /* @__PURE__ */ new Date())
+      .notNull(),
+  },
+  (table) => [index("user_config_userId_idx").on(table.userId)],
+);
+
+export const userConfigRelations = relations(userConfig, ({ one }) => ({
+  user: one(user, {
+    fields: [userConfig.userId],
+    references: [user.id],
+  }),
+}));
+
+export const userConfigInsertSchema = createInsertSchema(userConfig);
+export const userConfigSelectSchema = createSelectSchema(userConfig);
+export type UserConfigInsert = InferInsertModel<typeof userConfig>;
+export type UserConfigSelect = InferSelectModel<typeof userConfig>;
 
 export const importStatuses = [
   "importing",

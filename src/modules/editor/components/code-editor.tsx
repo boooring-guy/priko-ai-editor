@@ -74,6 +74,48 @@ function CodeEditorInner({
     initialContent: fileNode.content || "",
     draftContent,
     fileName: fileNode.name || "unknown.txt",
+    getContextFiles: async () => {
+      // Lazy load to break circular dependencies or avoid hook ordering issues
+      const { getDefaultStore } = await import("jotai");
+      const { openTabsAtom, flatFilesAtom } = await import("@/modules/files/store/file-atoms");
+      const { queryClient } = await import("@/components/providers");
+      const { queryKeys } = await import("@/lib/query-keys");
+      
+      const store = getDefaultStore();
+      const openTabs = store.get(openTabsAtom) || [];
+      const flatFiles = store.get(flatFilesAtom) || [];
+      const allDrafts = store.get(editorDraftsAtom) || {};
+
+      // Filter out current file and non-existent files. Grab last 3.
+      const contextTabs = openTabs
+        .filter(t => t.fileId !== fileId)
+        .slice(0, 3);
+        
+      const results: import("../extensions/suggestions").ContextFile[] = [];
+      
+      for (const tab of contextTabs) {
+        const fileMeta = flatFiles.find(f => f.id === tab.fileId);
+        if (!fileMeta) continue;
+
+        let content = allDrafts[tab.fileId];
+        if (!content) {
+          // Fallback to React Query cache
+          const cachedNode = queryClient.getQueryData<any>(queryKeys.files.detail(tab.fileId));
+          if (cachedNode && cachedNode.content) {
+            content = cachedNode.content;
+          }
+        }
+        
+        if (content) {
+          results.push({
+            fileName: fileMeta.name,
+            content
+          });
+        }
+      }
+      
+      return results;
+    },
     onSave: async (newContent) => {
       try {
         setIsSaving(true);

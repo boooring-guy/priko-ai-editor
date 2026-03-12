@@ -1,6 +1,16 @@
 {
   "name": "priko",
   "version": "0.8.0",
+  "description": "Priko is a modern, AI-powered local-first code editor and development environment.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/boooring-guy/priko.git"
+  },
+  "bugs": {
+    "url": "https://github.com/boooring-guy/priko/issues"
+  },
+  "homepage": "https://github.com/boooring-guy/priko#readme",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -21,7 +31,7 @@
   "dependencies": {
     "@ai-sdk/anthropic": "^3.0.46",
     "@ai-sdk/google": "^3.0.30",
-    "@ai-sdk/google-vertex": "^4.0.63",
+    "@ai-sdk/google-vertex": "^4.0.80",
     "@ai-sdk/openai": "^3.0.30",
     "@ai-sdk/openai-compatible": "^2.0.30",
     "@aws-sdk/client-s3": "^3.995.0",

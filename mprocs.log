@@ -1,2 +1,11 @@
 ERROR [lib::error] Error: channel closed
 ERROR [lib::error] Error: channel closed
+ERROR [lib::term::input_parser] CSI error: Failed to parse Cb param button
+ERROR [lib::term::input_parser] CSI error: Failed to parse Cb param button
+ERROR [lib::term::input_parser] CSI error: Failed to parse Cb param button
+ERROR [lib::term::input_parser] CSI error: Failed to parse Cb param button
+ERROR [lib::term::input_parser] CSI error: Failed to parse Cb param button
+ERROR [lib::term::input_parser] CSI error: Failed to parse Cb param button
+ERROR [lib::term::input_parser] CSI error: Failed to parse Cb param button
+ERROR [lib::term::input_parser] CSI error: Failed to parse Cb param button
+ERROR [lib::term::input_parser] CSI error: Failed to parse Cb param button

@@ -1,5 +1,5 @@
 "use client";
-
+import { version } from "@/../package.json";
 import React from "react";
 import { Command, Search, Layout, FileSearch } from "lucide-react";
 import Logo from "@/components/logo";
@@ -70,7 +70,7 @@ export function WelcomeView() {
 
       <div className="animate-item mt-12 text-center">
         <p className="text-xs text-muted-foreground/40 font-medium tracking-widest uppercase">
-          PRIKO EDITOR v1.0
+          PRIKO EDITOR v{version}
         </p>
       </div>
     </div>

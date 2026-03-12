@@ -1,6 +1,6 @@
 import { spawn } from "node:child_process";
 import { createRequire } from "node:module";
-import config from "@/config.json";
+import { getConfig } from "@/modules/config/server/get-config";
 
 const SUPPORTED_EXTENSIONS = new Set([
   "js",
@@ -36,8 +36,10 @@ function supportsBiomeFormatting(fileName: string): boolean {
 
 function isMuslRuntime(): boolean {
   if (process.platform !== "linux") return false;
-  const report = process.report?.getReport?.();
-  return !report?.header?.glibcVersionRuntime;
+  const report = process.report?.getReport?.() as
+    | Record<string, any>
+    | undefined;
+  return !(report?.header as Record<string, any>)?.glibcVersionRuntime;
 }
 
 function resolveBiomeBinaryPath(): string | null {
@@ -151,6 +153,7 @@ export async function formatContentOnSave(
   fileName: string,
   content: string,
 ): Promise<string> {
+  const config = await getConfig();
   if (!config.app.editor.formatOnSave.enabled) return content;
   if (!supportsBiomeFormatting(fileName)) return content;
 

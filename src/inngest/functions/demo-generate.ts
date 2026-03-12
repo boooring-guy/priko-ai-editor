@@ -1,7 +1,7 @@
 import { generateText } from "ai";
 import { inngestClient } from "@/inngest/client";
 import { INNGEST } from "@/inngest/keys";
-import { googleAI } from "@/modules/ai/ai-providers";
+import { googleAI, vertexAi } from "@/modules/ai/ai-providers";
 import { firecrawl } from "@/utils/firecrawl";
 
 const URL_REGEX =
@@ -40,7 +40,8 @@ export const demoGenerate = inngestClient.createFunction(
 
     const generatedText = await step.run("generate-text", async () => {
       const response = await generateText({
-        model: googleAI("gemini-3-flash-preview"),
+        // model: googleAI("gemini-3-flash-preview"),
+        model: vertexAi("openai/gpt-oss-120b-maas"),
         prompt: finalPrompt,
       });
       return response;
