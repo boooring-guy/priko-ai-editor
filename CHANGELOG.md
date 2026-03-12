@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.10.0](https://github.com/boooring-guy/priko/compare/v0.9.0...v0.10.0) (2026-03-12)
+
+
+### Features
+
+* Add quick edit extension to the code editor for AI-powered code modification with URL context. ([8968232](https://github.com/boooring-guy/priko/commit/8968232fcda4c1720f397ff8b41036d3da751d09))
+
 ## [0.9.0](https://github.com/boooring-guy/priko/compare/v0.8.0...v0.9.0) (2026-03-12)
 
 
